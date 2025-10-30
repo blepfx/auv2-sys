@@ -1,4 +1,3 @@
-#![cfg(target_os = "macos")]
 #![allow(non_snake_case)]
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
@@ -21,14 +20,9 @@ pub type OSType = FourCharCode;
 pub type Boolean = c_uchar;
 pub type Byte = UInt8;
 
-pub enum CFString__ {}
-pub type CFStringRef = *const CFString__;
-
-pub enum CFDictionary__ {}
-pub type CFDictionaryRef = *const CFDictionary__;
-
-pub enum CFURL__ {}
-pub type CFURLRef = *const CFURL__;
+pub type CFStringRef = *const c_void;
+pub type CFDictionaryRef = *const c_void;
+pub type CFURLRef = *const c_void;
 
 pub const noErr: OSStatus = 0;
 pub const kAudio_UnimplementedError: OSStatus = -4;
@@ -62,6 +56,20 @@ pub struct AudioStreamPacketDescription {
     pub mStartOffset: SInt64,
     pub mVariableFramesInPacket: UInt32,
     pub mDataByteSize: UInt32,
+}
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct AudioStreamBasicDescription {
+    pub mSampleRate: f64,
+    pub mFormatID: u32,
+    pub mFormatFlags: u32,
+    pub mBytesPerPacket: u32,
+    pub mFramesPerPacket: u32,
+    pub mBytesPerFrame: u32,
+    pub mChannelsPerFrame: u32,
+    pub mBitsPerChannel: u32,
+    pub mReserved: u32,
 }
 
 pub type SMPTETimeType = UInt32;
@@ -528,6 +536,7 @@ pub type AudioComponentFactoryFunction = unsafe extern "C" fn(
 )
     -> *mut AudioComponentPlugInInterface;
 
+#[cfg(target_os = "macos")]
 #[link(name = "AudioToolbox", kind = "framework")]
 extern "C" {
     pub fn AudioComponentFindNext(
@@ -782,12 +791,14 @@ pub type AUInputSamplesInOutputCallback = unsafe extern "C" fn(
     inNumberInputSamples: Float64,
 );
 
+#[cfg(target_os = "macos")]
 #[link(name = "AudioToolbox", kind = "framework")]
 extern "C" {
     pub static kAudioComponentRegistrationsChangedNotification: CFStringRef;
     pub static kAudioComponentInstanceInvalidationNotification: CFStringRef;
 }
 
+#[cfg(target_os = "macos")]
 #[link(name = "AudioToolbox", kind = "framework")]
 extern "C" {
     pub fn AudioUnitInitialize(inUnit: AudioUnit) -> OSStatus;
@@ -1067,6 +1078,7 @@ pub type AudioUnitRenderProc = unsafe extern "C" fn(
 
 // AudioOutputUnit.h
 
+#[cfg(target_os = "macos")]
 #[link(name = "AudioToolbox", kind = "framework")]
 extern "C" {
     pub fn AudioOutputUnitStart(ci: AudioUnit) -> OSStatus;
@@ -1866,6 +1878,7 @@ pub type NoteInstanceID = UInt32;
 
 pub type MusicDeviceComponent = AudioComponentInstance;
 
+#[cfg(target_os = "macos")]
 #[link(name = "AudioToolbox", kind = "framework")]
 extern "C" {
     pub fn MusicDeviceMIDIEvent(
