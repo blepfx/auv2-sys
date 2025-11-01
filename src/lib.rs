@@ -1,6 +1,8 @@
 #![allow(non_snake_case, non_upper_case_globals, non_camel_case_types)]
 
-use core_foundation_sys::{
+pub use core_foundation_sys as cf;
+
+use cf::{
     base::{Boolean, OSStatus, SInt16, SInt32, UInt8, UInt16, UInt32},
     dictionary::CFDictionaryRef,
     string::CFStringRef,
