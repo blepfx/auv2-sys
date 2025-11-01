@@ -8,10 +8,8 @@ use cf::{
     string::CFStringRef,
     url::CFURLRef,
 };
-use std::ffi::{c_uchar, c_void};
-use std::os::raw::{c_char, c_longlong, c_ulonglong};
+use std::ffi::{c_char, c_longlong, c_ulonglong, c_void};
 
-pub type SInt8 = c_uchar;
 pub type SInt64 = c_longlong;
 pub type UInt64 = c_ulonglong;
 pub type Float32 = f32;
@@ -469,7 +467,7 @@ pub type MIDITimeStamp = UInt64;
 pub struct MIDIPacket {
     pub timeStamp: MIDITimeStamp,
     pub length: UInt16,
-    pub data: [SInt8; 256],
+    pub data: [UInt8; 256],
 }
 
 #[repr(C)]
@@ -1181,7 +1179,7 @@ pub struct AUChannelInfo {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioUnitExternalBuffer {
-    pub buffer: *mut SInt8,
+    pub buffer: *mut UInt8,
     pub size: UInt32,
 }
 
