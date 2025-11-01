@@ -1,7 +1,8 @@
 [package]
 name = "auv2-sys"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Micah Johnston <micah@photophore.systems>"]
-edition = "2018"
+edition = "2024"
 
 [dependencies]
+core-foundation-sys = "0.8.7"

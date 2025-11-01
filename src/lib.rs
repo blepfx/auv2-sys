@@ -1,28 +1,19 @@
-#![allow(non_snake_case)]
-#![allow(non_upper_case_globals)]
-#![allow(non_camel_case_types)]
+#![allow(non_snake_case, non_upper_case_globals, non_camel_case_types)]
 
-use std::ffi::c_void;
-use std::os::raw::{c_char, c_int, c_longlong, c_short, c_uchar, c_uint, c_ulonglong, c_ushort};
+use core_foundation_sys::{
+    base::{Boolean, OSStatus, SInt16, SInt32, UInt8, UInt16, UInt32},
+    dictionary::CFDictionaryRef,
+    string::CFStringRef,
+    url::CFURLRef,
+};
+use std::ffi::{c_uchar, c_void};
+use std::os::raw::{c_char, c_longlong, c_ulonglong};
 
-pub type UInt8 = c_uchar;
-pub type UInt16 = c_ushort;
-pub type SInt16 = c_short;
-pub type UInt32 = c_uint;
-pub type SInt32 = c_int;
+pub type SInt8 = c_uchar;
 pub type SInt64 = c_longlong;
 pub type UInt64 = c_ulonglong;
 pub type Float32 = f32;
 pub type Float64 = f64;
-pub type OSStatus = SInt32;
-pub type FourCharCode = UInt32;
-pub type OSType = FourCharCode;
-pub type Boolean = c_uchar;
-pub type Byte = UInt8;
-
-pub type CFStringRef = *const c_void;
-pub type CFDictionaryRef = *const c_void;
-pub type CFURLRef = *const c_void;
 
 pub const noErr: OSStatus = 0;
 pub const kAudio_UnimplementedError: OSStatus = -4;
@@ -133,9 +124,9 @@ pub struct AudioTimeStamp {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioClassDescription {
-    pub mType: OSType,
-    pub mSubType: OSType,
-    pub mManufacturer: OSType,
+    pub mType: SInt32,
+    pub mSubType: SInt32,
+    pub mManufacturer: SInt32,
 }
 
 pub type AudioChannelLabel = UInt32;
@@ -476,7 +467,7 @@ pub type MIDITimeStamp = UInt64;
 pub struct MIDIPacket {
     pub timeStamp: MIDITimeStamp,
     pub length: UInt16,
-    pub data: [Byte; 256],
+    pub data: [SInt8; 256],
 }
 
 #[repr(C)]
@@ -505,9 +496,9 @@ pub const kAudioComponentInstantiation_LoadedRemotely: AudioComponentInstantiati
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioComponentDescription {
-    pub componentType: OSType,
-    pub componentSubType: OSType,
-    pub componentManufacturer: OSType,
+    pub componentType: SInt32,
+    pub componentSubType: SInt32,
+    pub componentManufacturer: SInt32,
     pub componentFlags: UInt32,
     pub componentFlagsMask: UInt32,
 }
@@ -536,9 +527,8 @@ pub type AudioComponentFactoryFunction = unsafe extern "C" fn(
 )
     -> *mut AudioComponentPlugInInterface;
 
-#[cfg(target_os = "macos")]
-#[link(name = "AudioToolbox", kind = "framework")]
-extern "C" {
+#[cfg_attr(target_os = "macos", link(name = "AudioToolbox", kind = "framework"))]
+unsafe extern "C" {
     pub fn AudioComponentFindNext(
         inComponent: AudioComponent,
         inDesc: *const AudioComponentDescription,
@@ -569,7 +559,7 @@ extern "C" {
     pub fn AudioComponentInstanceDispose(inInstance: AudioComponentInstance) -> OSStatus;
 
     pub fn AudioComponentInstanceGetComponent(inInstance: AudioComponentInstance)
-        -> AudioComponent;
+    -> AudioComponent;
     pub fn AudioComponentInstanceCanDo(
         inInstance: AudioComponentInstance,
         inSelectorID: SInt16,
@@ -791,16 +781,14 @@ pub type AUInputSamplesInOutputCallback = unsafe extern "C" fn(
     inNumberInputSamples: Float64,
 );
 
-#[cfg(target_os = "macos")]
-#[link(name = "AudioToolbox", kind = "framework")]
-extern "C" {
+#[cfg_attr(target_os = "macos", link(name = "AudioToolbox", kind = "framework"))]
+unsafe extern "C" {
     pub static kAudioComponentRegistrationsChangedNotification: CFStringRef;
     pub static kAudioComponentInstanceInvalidationNotification: CFStringRef;
 }
 
-#[cfg(target_os = "macos")]
-#[link(name = "AudioToolbox", kind = "framework")]
-extern "C" {
+#[cfg_attr(target_os = "macos", link(name = "AudioToolbox", kind = "framework"))]
+unsafe extern "C" {
     pub fn AudioUnitInitialize(inUnit: AudioUnit) -> OSStatus;
 
     pub fn AudioUnitUninitialize(inUnit: AudioUnit) -> OSStatus;
@@ -1078,9 +1066,8 @@ pub type AudioUnitRenderProc = unsafe extern "C" fn(
 
 // AudioOutputUnit.h
 
-#[cfg(target_os = "macos")]
-#[link(name = "AudioToolbox", kind = "framework")]
-extern "C" {
+#[cfg_attr(target_os = "macos", link(name = "AudioToolbox", kind = "framework"))]
+unsafe extern "C" {
     pub fn AudioOutputUnitStart(ci: AudioUnit) -> OSStatus;
     pub fn AudioOutputUnitStop(ci: AudioUnit) -> OSStatus;
 }
@@ -1192,7 +1179,7 @@ pub struct AUChannelInfo {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioUnitExternalBuffer {
-    pub buffer: *mut Byte,
+    pub buffer: *mut SInt8,
     pub size: UInt32,
 }
 
@@ -1878,9 +1865,8 @@ pub type NoteInstanceID = UInt32;
 
 pub type MusicDeviceComponent = AudioComponentInstance;
 
-#[cfg(target_os = "macos")]
-#[link(name = "AudioToolbox", kind = "framework")]
-extern "C" {
+#[cfg_attr(target_os = "macos", link(name = "AudioToolbox", kind = "framework"))]
+unsafe extern "C" {
     pub fn MusicDeviceMIDIEvent(
         inUnit: MusicDeviceComponent,
         inStatus: UInt32,
