@@ -53,19 +53,19 @@ pub struct AudioStreamPacketDescription {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioStreamBasicDescription {
-    pub mSampleRate: f64,
+    pub mSampleRate: Float64,
     pub mFormatID: AudioFormatID,
     pub mFormatFlags: AudioFormatFlags,
-    pub mBytesPerPacket: u32,
-    pub mFramesPerPacket: u32,
-    pub mBytesPerFrame: u32,
-    pub mChannelsPerFrame: u32,
-    pub mBitsPerChannel: u32,
-    pub mReserved: u32,
+    pub mBytesPerPacket: UInt32,
+    pub mFramesPerPacket: UInt32,
+    pub mBytesPerFrame: UInt32,
+    pub mChannelsPerFrame: UInt32,
+    pub mBitsPerChannel: UInt32,
+    pub mReserved: UInt32,
 }
 
-pub type AudioFormatID = u32;
-pub type AudioFormatFlags = u32;
+pub type AudioFormatID = UInt32;
+pub type AudioFormatFlags = UInt32;
 
 pub const kAudioFormatLinearPCM: AudioFormatID = 0x6c70636d;
 pub const kAudioFormatAC3: AudioFormatID = 0x61632d33;
@@ -2033,18 +2033,18 @@ pub union AudioUnitEventArgument {
 }
 
 pub type AUParameterListenerProc = unsafe extern "C" fn(
-    *mut c_void,
-    *mut c_void,
-    *const AudioUnitParameter,
-    AudioUnitParameterValue,
+    inUserData: *mut c_void,
+    inObject: *mut c_void,
+    inParameter: *const AudioUnitParameter,
+    inValue: AudioUnitParameterValue,
 );
 
 pub type AUEventListenerProc = unsafe extern "C" fn(
-    *mut c_void,
-    *mut c_void,
-    *const AudioUnitEvent,
-    UInt64,
-    AudioUnitParameterValue,
+    inUserData: *mut c_void,
+    inObject: *mut c_void,
+    inEvent: *const AudioUnitEvent,
+    inEventHostTime: UInt64,
+    inParameterValue: AudioUnitParameterValue,
 );
 
 #[repr(C)]
