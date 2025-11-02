@@ -54,8 +54,8 @@ pub struct AudioStreamPacketDescription {
 #[derive(Copy, Clone)]
 pub struct AudioStreamBasicDescription {
     pub mSampleRate: f64,
-    pub mFormatID: u32,
-    pub mFormatFlags: u32,
+    pub mFormatID: AudioFormatID,
+    pub mFormatFlags: AudioFormatFlags,
     pub mBytesPerPacket: u32,
     pub mFramesPerPacket: u32,
     pub mBytesPerFrame: u32,
@@ -63,6 +63,81 @@ pub struct AudioStreamBasicDescription {
     pub mBitsPerChannel: u32,
     pub mReserved: u32,
 }
+
+pub type AudioFormatID = u32;
+pub type AudioFormatFlags = u32;
+
+pub const kAudioFormatLinearPCM: AudioFormatID = 0x6c70636d;
+pub const kAudioFormatAC3: AudioFormatID = 0x61632d33;
+pub const kAudioFormat60958AC3: AudioFormatID = 0x63616333;
+pub const kAudioFormatAppleIMA4: AudioFormatID = 0x696d6134;
+pub const kAudioFormatMPEG4AAC: AudioFormatID = 0x61616320;
+pub const kAudioFormatMPEG4CELP: AudioFormatID = 0x63656c70;
+pub const kAudioFormatMPEG4HVXC: AudioFormatID = 0x68767863;
+pub const kAudioFormatMPEG4TwinVQ: AudioFormatID = 0x74777671;
+pub const kAudioFormatMACE3: AudioFormatID = 0x4d414333;
+pub const kAudioFormatMACE6: AudioFormatID = 0x4d414336;
+pub const kAudioFormatULaw: AudioFormatID = 0x756c6177;
+pub const kAudioFormatALaw: AudioFormatID = 0x616c6177;
+pub const kAudioFormatQDesign: AudioFormatID = 0x51444d43;
+pub const kAudioFormatQDesign2: AudioFormatID = 0x51444d32;
+pub const kAudioFormatQUALCOMM: AudioFormatID = 0x51636c70;
+pub const kAudioFormatMPEGLayer1: AudioFormatID = 0x2e6d7031;
+pub const kAudioFormatMPEGLayer2: AudioFormatID = 0x2e6d7032;
+pub const kAudioFormatMPEGLayer3: AudioFormatID = 0x2e6d7033;
+pub const kAudioFormatTimeCode: AudioFormatID = 0x74696d65;
+pub const kAudioFormatMIDIStream: AudioFormatID = 0x6d696469;
+pub const kAudioFormatParameterValueStream: AudioFormatID = 0x61707673;
+pub const kAudioFormatAppleLossless: AudioFormatID = 0x616c6163;
+pub const kAudioFormatMPEG4AAC_HE: AudioFormatID = 0x61616368;
+pub const kAudioFormatMPEG4AAC_LD: AudioFormatID = 0x6161636c;
+pub const kAudioFormatMPEG4AAC_ELD: AudioFormatID = 0x61616365;
+pub const kAudioFormatMPEG4AAC_ELD_SBR: AudioFormatID = 0x61616366;
+pub const kAudioFormatMPEG4AAC_ELD_V2: AudioFormatID = 0x61616367;
+pub const kAudioFormatMPEG4AAC_HE_V2: AudioFormatID = 0x61616370;
+pub const kAudioFormatMPEG4AAC_Spatial: AudioFormatID = 0x61616373;
+pub const kAudioFormatMPEGD_USAC: AudioFormatID = 0x75736163;
+pub const kAudioFormatAMR: AudioFormatID = 0x73616d72;
+pub const kAudioFormatAMR_WB: AudioFormatID = 0x73617762;
+pub const kAudioFormatAudible: AudioFormatID = 0x41554442;
+pub const kAudioFormatiLBC: AudioFormatID = 0x696c6263;
+pub const kAudioFormatDVIIntelIMA: AudioFormatID = 0x6D730011;
+pub const kAudioFormatMicrosoftGSM: AudioFormatID = 0x6D730031;
+pub const kAudioFormatAES3: AudioFormatID = 0x61657333;
+pub const kAudioFormatEnhancedAC3: AudioFormatID = 0x65632d33;
+pub const kAudioFormatFLAC: AudioFormatID = 0x666c6163;
+pub const kAudioFormatOpus: AudioFormatID = 0x6f707573;
+pub const kAudioFormatAPAC: AudioFormatID = 0x61706163;
+
+pub const kAudioFormatFlagIsFloat: AudioFormatFlags = 1 << 0;
+pub const kAudioFormatFlagIsBigEndian: AudioFormatFlags = 1 << 1;
+pub const kAudioFormatFlagIsSignedInteger: AudioFormatFlags = 1 << 2;
+pub const kAudioFormatFlagIsPacked: AudioFormatFlags = 1 << 3;
+pub const kAudioFormatFlagIsAlignedHigh: AudioFormatFlags = 1 << 4;
+pub const kAudioFormatFlagIsNonInterleaved: AudioFormatFlags = 1 << 5;
+pub const kAudioFormatFlagIsNonMixable: AudioFormatFlags = 1 << 6;
+pub const kAudioFormatFlagsAreAllClear: AudioFormatFlags = 0x80000000;
+
+pub const kLinearPCMFormatFlagIsFloat: AudioFormatFlags = kAudioFormatFlagIsFloat;
+pub const kLinearPCMFormatFlagIsBigEndian: AudioFormatFlags = kAudioFormatFlagIsBigEndian;
+pub const kLinearPCMFormatFlagIsSignedInteger: AudioFormatFlags = kAudioFormatFlagIsSignedInteger;
+pub const kLinearPCMFormatFlagIsPacked: AudioFormatFlags = kAudioFormatFlagIsPacked;
+pub const kLinearPCMFormatFlagIsAlignedHigh: AudioFormatFlags = kAudioFormatFlagIsAlignedHigh;
+pub const kLinearPCMFormatFlagIsNonInterleaved: AudioFormatFlags = kAudioFormatFlagIsNonInterleaved;
+pub const kLinearPCMFormatFlagIsNonMixable: AudioFormatFlags = kAudioFormatFlagIsNonMixable;
+pub const kLinearPCMFormatFlagsSampleFractionShift: AudioFormatFlags = 7;
+pub const kLinearPCMFormatFlagsSampleFractionMask: AudioFormatFlags =
+    0x3F << kLinearPCMFormatFlagsSampleFractionShift;
+pub const kLinearPCMFormatFlagsAreAllClear: AudioFormatFlags = kAudioFormatFlagsAreAllClear;
+
+pub const kAppleLosslessFormatFlag_16BitSourceData: AudioFormatFlags = 1;
+pub const kAppleLosslessFormatFlag_20BitSourceData: AudioFormatFlags = 2;
+pub const kAppleLosslessFormatFlag_24BitSourceData: AudioFormatFlags = 3;
+pub const kAppleLosslessFormatFlag_32BitSourceData: AudioFormatFlags = 4;
+
+pub const kAudioFormatFlagsNativeEndian: AudioFormatFlags = 0;
+pub const kAudioFormatFlagsNativeFloatPacked: AudioFormatFlags =
+    kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
 
 pub type SMPTETimeType = UInt32;
 
