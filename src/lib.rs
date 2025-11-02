@@ -1,11 +1,11 @@
 #![allow(non_snake_case, non_upper_case_globals, non_camel_case_types)]
 
 pub use core_foundation_sys as cf;
-use core_foundation_sys::runloop::CFRunLoopRef;
 
 use cf::{
     base::{Boolean, OSStatus, SInt16, SInt32, UInt8, UInt16, UInt32},
     dictionary::CFDictionaryRef,
+    runloop::CFRunLoopRef,
     string::CFStringRef,
     url::CFURLRef,
 };
