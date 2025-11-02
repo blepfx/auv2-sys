@@ -1,6 +1,7 @@
 #![allow(non_snake_case, non_upper_case_globals, non_camel_case_types)]
 
 pub use core_foundation_sys as cf;
+use core_foundation_sys::runloop::CFRunLoopRef;
 
 use cf::{
     base::{Boolean, OSStatus, SInt16, SInt32, UInt8, UInt16, UInt32},
@@ -1932,3 +1933,132 @@ pub type MusicDeviceStopNoteProc = unsafe extern "C" fn(
     inNoteInstanceID: NoteInstanceID,
     inOffsetSampleFrame: UInt32,
 ) -> OSStatus;
+
+// AudioUnitUtilities.h
+
+pub const kAUParameterListener_AnyParameter: UInt32 = 0xFFFFFFFF;
+
+pub const kAudioUnitEvent_ParameterValueChange: UInt32 = 0;
+pub const kAudioUnitEvent_BeginParameterChangeGesture: UInt32 = 1;
+pub const kAudioUnitEvent_EndParameterChangeGesture: UInt32 = 2;
+pub const kAudioUnitEvent_PropertyChange: UInt32 = 3;
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct AudioUnitEvent {
+    pub mEventType: UInt32,
+    pub mArgument: AudioUnitEventArgument,
+}
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union AudioUnitEventArgument {
+    pub mParameter: AudioUnitParameter,
+    pub mProperty: AudioUnitProperty,
+}
+
+pub type AUParameterListenerProc = unsafe extern "C" fn(
+    *mut c_void,
+    *mut c_void,
+    *const AudioUnitParameter,
+    AudioUnitParameterValue,
+);
+
+pub type AUEventListenerProc = unsafe extern "C" fn(
+    *mut c_void,
+    *mut c_void,
+    *const AudioUnitEvent,
+    UInt64,
+    AudioUnitParameterValue,
+);
+
+#[repr(C)]
+pub struct __AUListenerBase(c_void);
+
+pub type AUParameterListenerRef = *const __AUListenerBase;
+pub type AUEventListenerRef = AUParameterListenerRef;
+
+#[cfg_attr(target_os = "macos", link(name = "AudioToolbox", kind = "framework"))]
+unsafe extern "C" {
+    pub fn AUListenerCreate(
+        inProc: AUParameterListenerProc,
+        inUserData: *mut c_void,
+        inRunLoop: CFRunLoopRef,
+        inRunLoopMode: CFStringRef,
+        inNotificationInterval: Float32,
+        outListener: *mut AUParameterListenerRef,
+    ) -> OSStatus;
+
+    pub fn AUListenerDispose(inListener: AUParameterListenerRef) -> OSStatus;
+
+    pub fn AUListenerAddParameter(
+        inListener: AUParameterListenerRef,
+        inObject: *mut c_void,
+        inParameter: *const AudioUnitParameter,
+    ) -> OSStatus;
+
+    pub fn AUListenerRemoveParameter(
+        inListener: AUParameterListenerRef,
+        inObject: *mut c_void,
+        inParameter: *const AudioUnitParameter,
+    ) -> OSStatus;
+
+    pub fn AUParameterSet(
+        inSendingListener: AUParameterListenerRef,
+        inSendingObject: *mut c_void,
+        inParameter: *const AudioUnitParameter,
+        inValue: AudioUnitParameterValue,
+        inBufferOffsetInFrames: UInt32,
+    ) -> OSStatus;
+
+    pub fn AUParameterListenerNotify(
+        inSendingListener: AUParameterListenerRef,
+        inSendingObject: *mut c_void,
+        inParameter: *const AudioUnitParameter,
+    ) -> OSStatus;
+
+    pub fn AUEventListenerCreate(
+        inProc: AUEventListenerProc,
+        inUserData: *mut c_void,
+        inRunLoop: CFRunLoopRef,
+        inRunLoopMode: CFStringRef,
+        inNotificationInterval: Float32,
+        inValueChangeGranularity: Float32,
+        outListener: *mut AUEventListenerRef,
+    ) -> OSStatus;
+
+    pub fn AUEventListenerAddEventType(
+        inListener: AUEventListenerRef,
+        inObject: *mut c_void,
+        inEvent: *const AudioUnitEvent,
+    ) -> OSStatus;
+
+    pub fn AUEventListenerRemoveEventType(
+        inListener: AUEventListenerRef,
+        inObject: *mut c_void,
+        inEvent: *const AudioUnitEvent,
+    ) -> OSStatus;
+
+    pub fn AUEventListenerNotify(
+        inSendingListener: AUEventListenerRef,
+        inSendingObject: *mut c_void,
+        inEvent: *const AudioUnitEvent,
+    ) -> OSStatus;
+
+    pub fn AUParameterValueToLinear(
+        inParameterValue: AudioUnitParameterValue,
+        inParameter: *const AudioUnitParameter,
+    ) -> Float32;
+
+    pub fn AUParameterValueFromLinear(
+        inLinearValue: Float32,
+        inParameter: *const AudioUnitParameter,
+    ) -> AudioUnitParameterValue;
+
+    pub fn AUParameterFormatValue(
+        inParameterValue: Float64,
+        inParameter: *const AudioUnitParameter,
+        inTextBuffer: *const c_char,
+        inDigits: UInt32,
+    );
+}
