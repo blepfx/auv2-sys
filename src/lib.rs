@@ -801,8 +801,8 @@ pub struct AudioUnitParameterEventImmediate {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union AudioUnitParameterEventValues {
-    ramp: AudioUnitParameterEventRamp,
-    immediate: AudioUnitParameterEventImmediate,
+    pub ramp: AudioUnitParameterEventRamp,
+    pub immediate: AudioUnitParameterEventImmediate,
 }
 
 #[repr(C)]
