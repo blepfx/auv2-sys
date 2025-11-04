@@ -3,18 +3,13 @@
 pub use core_foundation_sys as cf;
 
 use cf::{
-    base::{Boolean, OSStatus, SInt16, SInt32, UInt8, UInt16, UInt32},
+    base::{Boolean, OSStatus},
     dictionary::CFDictionaryRef,
     runloop::CFRunLoopRef,
     string::CFStringRef,
     url::CFURLRef,
 };
-use std::ffi::{c_char, c_longlong, c_ulonglong, c_void};
-
-pub type SInt64 = c_longlong;
-pub type UInt64 = c_ulonglong;
-pub type Float32 = f32;
-pub type Float64 = f64;
+use std::ffi::{c_char, c_void};
 
 pub const noErr: OSStatus = 0;
 pub const kAudio_UnimplementedError: OSStatus = -4;
@@ -30,42 +25,42 @@ pub const kAudio_MemFullError: OSStatus = -108;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioBuffer {
-    pub mNumberChannels: UInt32,
-    pub mDataByteSize: UInt32,
+    pub mNumberChannels: u32,
+    pub mDataByteSize: u32,
     pub mData: *mut c_void,
 }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioBufferList {
-    mNumberBuffers: UInt32,
+    mNumberBuffers: u32,
     mBuffers: [AudioBuffer; 0],
 }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioStreamPacketDescription {
-    pub mStartOffset: SInt64,
-    pub mVariableFramesInPacket: UInt32,
-    pub mDataByteSize: UInt32,
+    pub mStartOffset: i64,
+    pub mVariableFramesInPacket: u32,
+    pub mDataByteSize: u32,
 }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioStreamBasicDescription {
-    pub mSampleRate: Float64,
+    pub mSampleRate: f64,
     pub mFormatID: AudioFormatID,
     pub mFormatFlags: AudioFormatFlags,
-    pub mBytesPerPacket: UInt32,
-    pub mFramesPerPacket: UInt32,
-    pub mBytesPerFrame: UInt32,
-    pub mChannelsPerFrame: UInt32,
-    pub mBitsPerChannel: UInt32,
-    pub mReserved: UInt32,
+    pub mBytesPerPacket: u32,
+    pub mFramesPerPacket: u32,
+    pub mBytesPerFrame: u32,
+    pub mChannelsPerFrame: u32,
+    pub mBitsPerChannel: u32,
+    pub mReserved: u32,
 }
 
-pub type AudioFormatID = UInt32;
-pub type AudioFormatFlags = UInt32;
+pub type AudioFormatID = u32;
+pub type AudioFormatFlags = u32;
 
 pub const kAudioFormatLinearPCM: AudioFormatID = 0x6c70636d;
 pub const kAudioFormatAC3: AudioFormatID = 0x61632d33;
@@ -139,7 +134,7 @@ pub const kAudioFormatFlagsNativeEndian: AudioFormatFlags = 0;
 pub const kAudioFormatFlagsNativeFloatPacked: AudioFormatFlags =
     kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
 
-pub type SMPTETimeType = UInt32;
+pub type SMPTETimeType = u32;
 
 pub const kSMPTETimeType24: SMPTETimeType = 0;
 pub const kSMPTETimeType25: SMPTETimeType = 1;
@@ -154,7 +149,7 @@ pub const kSMPTETimeType5994Drop: SMPTETimeType = 9;
 pub const kSMPTETimeType50: SMPTETimeType = 10;
 pub const kSMPTETimeType2398: SMPTETimeType = 11;
 
-pub type SMPTETimeFlags = UInt32;
+pub type SMPTETimeFlags = u32;
 
 pub const kSMPTETimeUnknown: SMPTETimeFlags = 0;
 pub const kSMPTETimeValid: SMPTETimeFlags = 1 << 0;
@@ -163,18 +158,18 @@ pub const kSMPTETimeRunning: SMPTETimeFlags = 1 << 1;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct SMPTETime {
-    pub mSubframes: SInt16,
-    pub mSubframeDivisor: SInt16,
-    pub mCounter: UInt32,
+    pub mSubframes: i16,
+    pub mSubframeDivisor: i16,
+    pub mCounter: u32,
     pub mType: SMPTETimeType,
     pub mFlags: SMPTETimeFlags,
-    pub mHours: SInt16,
-    pub mMinutes: SInt16,
-    pub mSeconds: SInt16,
-    pub mFrames: SInt16,
+    pub mHours: i16,
+    pub mMinutes: i16,
+    pub mSeconds: i16,
+    pub mFrames: i16,
 }
 
-pub type AudioTimeStampFlags = UInt32;
+pub type AudioTimeStampFlags = u32;
 
 pub const kAudioTimeStampNothingValid: AudioTimeStampFlags = 0;
 pub const kAudioTimeStampSampleTimeValid: AudioTimeStampFlags = 1 << 0;
@@ -188,24 +183,24 @@ pub const kAudioTimeStampSampleHostTimeValid: AudioTimeStampFlags =
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioTimeStamp {
-    pub mSampleTime: Float64,
-    pub mHostTime: UInt64,
-    pub mRateScalar: Float64,
-    pub mWordClockTime: UInt64,
+    pub mSampleTime: f64,
+    pub mHostTime: u64,
+    pub mRateScalar: f64,
+    pub mWordClockTime: u64,
     pub mSMPTETime: SMPTETime,
     pub mFlags: AudioTimeStampFlags,
-    pub mReserved: UInt32,
+    pub mReserved: u32,
 }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioClassDescription {
-    pub mType: SInt32,
-    pub mSubType: SInt32,
-    pub mManufacturer: SInt32,
+    pub mType: i32,
+    pub mSubType: i32,
+    pub mManufacturer: i32,
 }
 
-pub type AudioChannelLabel = UInt32;
+pub type AudioChannelLabel = u32;
 
 pub const kAudioChannelLabel_Unknown: AudioChannelLabel = 0xFFFFFFFF;
 pub const kAudioChannelLabel_Unused: AudioChannelLabel = 0;
@@ -307,7 +302,7 @@ pub const kAudioChannelLabel_HOA_ACN_65024: AudioChannelLabel = (2 << 16) | 6502
 pub const kAudioChannelLabel_BeginReserved: AudioChannelLabel = 0xF0000000;
 pub const kAudioChannelLabel_EndReserved: AudioChannelLabel = 0xFFFFFFFE;
 
-pub type AudioChannelBitmap = UInt32;
+pub type AudioChannelBitmap = u32;
 
 pub const kAudioChannelBit_Left: AudioChannelBitmap = 1 << 0;
 pub const kAudioChannelBit_Right: AudioChannelBitmap = 1 << 1;
@@ -338,14 +333,14 @@ pub const kAudioChannelBit_LeftTopRear: AudioChannelBitmap = 1 << 24;
 pub const kAudioChannelBit_CenterTopRear: AudioChannelBitmap = 1 << 25;
 pub const kAudioChannelBit_RightTopRear: AudioChannelBitmap = 1 << 26;
 
-pub type AudioChannelFlags = UInt32;
+pub type AudioChannelFlags = u32;
 
 pub const kAudioChannelFlags_AllOff: AudioChannelFlags = 0;
 pub const kAudioChannelFlags_RectangularCoordinates: AudioChannelFlags = 1 << 0;
 pub const kAudioChannelFlags_SphericalCoordinates: AudioChannelFlags = 1 << 1;
 pub const kAudioChannelFlags_Meters: AudioChannelFlags = 1 << 2;
 
-pub type AudioChannelCoordinateIndex = UInt32;
+pub type AudioChannelCoordinateIndex = u32;
 
 pub const kAudioChannelCoordinates_LeftRight: AudioChannelCoordinateIndex = 0;
 pub const kAudioChannelCoordinates_BackFront: AudioChannelCoordinateIndex = 1;
@@ -354,7 +349,7 @@ pub const kAudioChannelCoordinates_Azimuth: AudioChannelCoordinateIndex = 0;
 pub const kAudioChannelCoordinates_Elevation: AudioChannelCoordinateIndex = 1;
 pub const kAudioChannelCoordinates_Distance: AudioChannelCoordinateIndex = 2;
 
-pub type AudioChannelLayoutTag = UInt32;
+pub type AudioChannelLayoutTag = u32;
 
 pub const kAudioChannelLayoutTag_UseChannelDescriptions: AudioChannelLayoutTag = (0 << 16) | 0;
 pub const kAudioChannelLayoutTag_UseChannelBitmap: AudioChannelLayoutTag = (1 << 16) | 0;
@@ -522,7 +517,7 @@ pub const kAudioChannelLayoutTag_Unknown: AudioChannelLayoutTag = 0xFFFF0000;
 pub struct AudioChannelDescription {
     pub mChannelLabel: AudioChannelLabel,
     pub mChannelFlags: AudioChannelFlags,
-    pub mCoordinates: [Float32; 3],
+    pub mCoordinates: [f32; 3],
 }
 
 #[repr(C)]
@@ -530,32 +525,32 @@ pub struct AudioChannelDescription {
 pub struct AudioChannelLayout {
     pub mChannelLayoutTag: AudioChannelLayoutTag,
     pub mChannelBitmap: AudioChannelBitmap,
-    pub mNumberChannelDescriptions: UInt32,
+    pub mNumberChannelDescriptions: u32,
     pub mChannelDescriptions: [AudioChannelDescription; 0],
 }
 
 // MidiServices.h
 
-pub type MIDITimeStamp = UInt64;
+pub type MIDITimeStamp = u64;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct MIDIPacket {
     pub timeStamp: MIDITimeStamp,
-    pub length: UInt16,
-    pub data: [UInt8; 256],
+    pub length: u16,
+    pub data: [u8; 256],
 }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct MIDIPacketList {
-    pub numPackets: UInt32,
+    pub numPackets: u32,
     pub packet: [MIDIPacket; 0],
 }
 
 // AudioComponent.h
 
-pub type AudioComponentFlags = UInt32;
+pub type AudioComponentFlags = u32;
 
 pub const kAudioComponentFlag_Unsearchable: AudioComponentFlags = 1;
 pub const kAudioComponentFlag_SandboxSafe: AudioComponentFlags = 2;
@@ -563,7 +558,7 @@ pub const kAudioComponentFlag_IsV3AudioUnit: AudioComponentFlags = 4;
 pub const kAudioComponentFlag_RequiresAsyncInstantiation: AudioComponentFlags = 8;
 pub const kAudioComponentFlag_CanLoadInProcess: AudioComponentFlags = 0x10;
 
-pub type AudioComponentInstantiationOptions = UInt32;
+pub type AudioComponentInstantiationOptions = u32;
 
 pub const kAudioComponentInstantiation_LoadOutOfProcess: AudioComponentInstantiationOptions = 1;
 pub const kAudioComponentInstantiation_LoadInProcess: AudioComponentInstantiationOptions = 2;
@@ -572,11 +567,11 @@ pub const kAudioComponentInstantiation_LoadedRemotely: AudioComponentInstantiati
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioComponentDescription {
-    pub componentType: SInt32,
-    pub componentSubType: SInt32,
-    pub componentManufacturer: SInt32,
-    pub componentFlags: UInt32,
-    pub componentFlagsMask: UInt32,
+    pub componentType: i32,
+    pub componentSubType: i32,
+    pub componentManufacturer: i32,
+    pub componentFlags: u32,
+    pub componentFlagsMask: u32,
 }
 
 pub enum AudioComponent__ {}
@@ -594,7 +589,7 @@ pub struct AudioComponentPlugInInterface {
         unsafe extern "C" fn(self_: *mut c_void, mInstance: AudioComponentInstance) -> OSStatus,
     >,
     pub Close: Option<unsafe extern "C" fn(self_: *mut c_void) -> OSStatus>,
-    pub Lookup: Option<unsafe extern "C" fn(selector: SInt16) -> Option<AudioComponentMethod>>,
+    pub Lookup: Option<unsafe extern "C" fn(selector: i16) -> Option<AudioComponentMethod>>,
     pub reserved: *mut c_void,
 }
 
@@ -610,7 +605,7 @@ unsafe extern "C" {
         inDesc: *const AudioComponentDescription,
     ) -> AudioComponent;
 
-    pub fn AudioComponentCount(inDesc: *const AudioComponentDescription) -> UInt32;
+    pub fn AudioComponentCount(inDesc: *const AudioComponentDescription) -> u32;
 
     pub fn AudioComponentCopyName(
         inComponent: AudioComponent,
@@ -622,10 +617,7 @@ unsafe extern "C" {
         outDesc: *mut AudioComponentDescription,
     ) -> OSStatus;
 
-    pub fn AudioComponentGetVersion(
-        inComponent: AudioComponent,
-        outVersion: *mut UInt32,
-    ) -> OSStatus;
+    pub fn AudioComponentGetVersion(inComponent: AudioComponent, outVersion: *mut u32) -> OSStatus;
 
     pub fn AudioComponentInstanceNew(
         inComponent: AudioComponent,
@@ -638,13 +630,13 @@ unsafe extern "C" {
     -> AudioComponent;
     pub fn AudioComponentInstanceCanDo(
         inInstance: AudioComponentInstance,
-        inSelectorID: SInt16,
+        inSelectorID: i16,
     ) -> Boolean;
 
     pub fn AudioComponentRegister(
         inDesc: *const AudioComponentDescription,
         inName: CFStringRef,
-        inVersion: UInt32,
+        inVersion: u32,
         inFactory: AudioComponentFactoryFunction,
     ) -> AudioComponent;
 
@@ -658,75 +650,75 @@ unsafe extern "C" {
 
 pub type AudioUnit = AudioComponentInstance;
 
-pub const kAudioUnitType_Output: UInt32 = u32::from_be_bytes(*b"auou");
-pub const kAudioUnitType_MusicDevice: UInt32 = u32::from_be_bytes(*b"aumu");
-pub const kAudioUnitType_MusicEffect: UInt32 = u32::from_be_bytes(*b"aumf");
-pub const kAudioUnitType_FormatConverter: UInt32 = u32::from_be_bytes(*b"aufc");
-pub const kAudioUnitType_Effect: UInt32 = u32::from_be_bytes(*b"aufx");
-pub const kAudioUnitType_Mixer: UInt32 = u32::from_be_bytes(*b"aumx");
-pub const kAudioUnitType_Panner: UInt32 = u32::from_be_bytes(*b"aupn");
-pub const kAudioUnitType_Generator: UInt32 = u32::from_be_bytes(*b"augn");
-pub const kAudioUnitType_OfflineEffect: UInt32 = u32::from_be_bytes(*b"auol");
-pub const kAudioUnitType_MIDIProcessor: UInt32 = u32::from_be_bytes(*b"aumi");
-pub const kAudioUnitType_RemoteEffect: UInt32 = u32::from_be_bytes(*b"aurx");
-pub const kAudioUnitType_RemoteGenerator: UInt32 = u32::from_be_bytes(*b"aurg");
-pub const kAudioUnitType_RemoteInstrument: UInt32 = u32::from_be_bytes(*b"auri");
-pub const kAudioUnitType_RemoteMusicEffect: UInt32 = u32::from_be_bytes(*b"aurm");
+pub const kAudioUnitType_Output: u32 = u32::from_be_bytes(*b"auou");
+pub const kAudioUnitType_MusicDevice: u32 = u32::from_be_bytes(*b"aumu");
+pub const kAudioUnitType_MusicEffect: u32 = u32::from_be_bytes(*b"aumf");
+pub const kAudioUnitType_FormatConverter: u32 = u32::from_be_bytes(*b"aufc");
+pub const kAudioUnitType_Effect: u32 = u32::from_be_bytes(*b"aufx");
+pub const kAudioUnitType_Mixer: u32 = u32::from_be_bytes(*b"aumx");
+pub const kAudioUnitType_Panner: u32 = u32::from_be_bytes(*b"aupn");
+pub const kAudioUnitType_Generator: u32 = u32::from_be_bytes(*b"augn");
+pub const kAudioUnitType_OfflineEffect: u32 = u32::from_be_bytes(*b"auol");
+pub const kAudioUnitType_MIDIProcessor: u32 = u32::from_be_bytes(*b"aumi");
+pub const kAudioUnitType_RemoteEffect: u32 = u32::from_be_bytes(*b"aurx");
+pub const kAudioUnitType_RemoteGenerator: u32 = u32::from_be_bytes(*b"aurg");
+pub const kAudioUnitType_RemoteInstrument: u32 = u32::from_be_bytes(*b"auri");
+pub const kAudioUnitType_RemoteMusicEffect: u32 = u32::from_be_bytes(*b"aurm");
 
-pub const kAudioUnitManufacturer_Apple: UInt32 = u32::from_be_bytes(*b"appl");
+pub const kAudioUnitManufacturer_Apple: u32 = u32::from_be_bytes(*b"appl");
 
-pub const kAudioUnitSubType_GenericOutput: UInt32 = u32::from_be_bytes(*b"genr");
-pub const kAudioUnitSubType_VoiceProcessingIO: UInt32 = u32::from_be_bytes(*b"vpio");
-pub const kAudioUnitSubType_HALOutput: UInt32 = u32::from_be_bytes(*b"ahal");
-pub const kAudioUnitSubType_DefaultOutput: UInt32 = u32::from_be_bytes(*b"def ");
-pub const kAudioUnitSubType_SystemOutput: UInt32 = u32::from_be_bytes(*b"sys ");
-pub const kAudioUnitSubType_RemoteIO: UInt32 = u32::from_be_bytes(*b"rioc");
-pub const kAudioUnitSubType_DLSSynth: UInt32 = u32::from_be_bytes(*b"dls ");
-pub const kAudioUnitSubType_Sampler: UInt32 = u32::from_be_bytes(*b"samp");
-pub const kAudioUnitSubType_MIDISynth: UInt32 = u32::from_be_bytes(*b"msyn");
-pub const kAudioUnitSubType_AUConverter: UInt32 = u32::from_be_bytes(*b"conv");
-pub const kAudioUnitSubType_Varispeed: UInt32 = u32::from_be_bytes(*b"vari");
-pub const kAudioUnitSubType_DeferredRenderer: UInt32 = u32::from_be_bytes(*b"defr");
-pub const kAudioUnitSubType_Splitter: UInt32 = u32::from_be_bytes(*b"splt");
-pub const kAudioUnitSubType_MultiSplitter: UInt32 = u32::from_be_bytes(*b"mspl");
-pub const kAudioUnitSubType_Merger: UInt32 = u32::from_be_bytes(*b"merg");
-pub const kAudioUnitSubType_NewTimePitch: UInt32 = u32::from_be_bytes(*b"nutp");
-pub const kAudioUnitSubType_AUiPodTimeOther: UInt32 = u32::from_be_bytes(*b"ipto");
-pub const kAudioUnitSubType_RoundTripAAC: UInt32 = u32::from_be_bytes(*b"raac");
-pub const kAudioUnitSubType_TimePitch: UInt32 = u32::from_be_bytes(*b"tmpt");
-pub const kAudioUnitSubType_PeakLimiter: UInt32 = u32::from_be_bytes(*b"lmtr");
-pub const kAudioUnitSubType_DynamicsProcessor: UInt32 = u32::from_be_bytes(*b"dcmp");
-pub const kAudioUnitSubType_LowPassFilter: UInt32 = u32::from_be_bytes(*b"lpas");
-pub const kAudioUnitSubType_HighPassFilter: UInt32 = u32::from_be_bytes(*b"hpas");
-pub const kAudioUnitSubType_BandPassFilter: UInt32 = u32::from_be_bytes(*b"bpas");
-pub const kAudioUnitSubType_HighShelfFilter: UInt32 = u32::from_be_bytes(*b"hshf");
-pub const kAudioUnitSubType_LowShelfFilter: UInt32 = u32::from_be_bytes(*b"lshf");
-pub const kAudioUnitSubType_ParametricEQ: UInt32 = u32::from_be_bytes(*b"pmeq");
-pub const kAudioUnitSubType_Distortion: UInt32 = u32::from_be_bytes(*b"dist");
-pub const kAudioUnitSubType_Delay: UInt32 = u32::from_be_bytes(*b"dely");
-pub const kAudioUnitSubType_SampleDelay: UInt32 = u32::from_be_bytes(*b"sdly");
-pub const kAudioUnitSubType_NBandEQ: UInt32 = u32::from_be_bytes(*b"nbeq");
-pub const kAudioUnitSubType_Reverb2: UInt32 = u32::from_be_bytes(*b"rvb2");
-pub const kAudioUnitSubType_GraphicEQ: UInt32 = u32::from_be_bytes(*b"greq");
-pub const kAudioUnitSubType_MultiBandCompressor: UInt32 = u32::from_be_bytes(*b"mcmp");
-pub const kAudioUnitSubType_MatrixReverb: UInt32 = u32::from_be_bytes(*b"mrev");
-pub const kAudioUnitSubType_Pitch: UInt32 = u32::from_be_bytes(*b"tmpt");
-pub const kAudioUnitSubType_AUFilter: UInt32 = u32::from_be_bytes(*b"filt");
-pub const kAudioUnitSubType_NetSend: UInt32 = u32::from_be_bytes(*b"nsnd");
-pub const kAudioUnitSubType_RogerBeep: UInt32 = u32::from_be_bytes(*b"rogr");
-pub const kAudioUnitSubType_MultiChannelMixer: UInt32 = u32::from_be_bytes(*b"mcmx");
-pub const kAudioUnitSubType_MatrixMixer: UInt32 = u32::from_be_bytes(*b"mxmx");
-pub const kAudioUnitSubType_SpatialMixer: UInt32 = u32::from_be_bytes(*b"3dem");
-pub const kAudioUnitSubType_StereoMixer: UInt32 = u32::from_be_bytes(*b"smxr");
-pub const kAudioUnitSubType_SphericalHeadPanner: UInt32 = u32::from_be_bytes(*b"sphr");
-pub const kAudioUnitSubType_VectorPanner: UInt32 = u32::from_be_bytes(*b"vbas");
-pub const kAudioUnitSubType_SoundFieldPanner: UInt32 = u32::from_be_bytes(*b"ambi");
-pub const kAudioUnitSubType_HRTFPanner: UInt32 = u32::from_be_bytes(*b"hrtf");
-pub const kAudioUnitSubType_NetReceive: UInt32 = u32::from_be_bytes(*b"nrcv");
-pub const kAudioUnitSubType_ScheduledSoundPlayer: UInt32 = u32::from_be_bytes(*b"sspl");
-pub const kAudioUnitSubType_AudioFilePlayer: UInt32 = u32::from_be_bytes(*b"afpl");
+pub const kAudioUnitSubType_GenericOutput: u32 = u32::from_be_bytes(*b"genr");
+pub const kAudioUnitSubType_VoiceProcessingIO: u32 = u32::from_be_bytes(*b"vpio");
+pub const kAudioUnitSubType_HALOutput: u32 = u32::from_be_bytes(*b"ahal");
+pub const kAudioUnitSubType_DefaultOutput: u32 = u32::from_be_bytes(*b"def ");
+pub const kAudioUnitSubType_SystemOutput: u32 = u32::from_be_bytes(*b"sys ");
+pub const kAudioUnitSubType_RemoteIO: u32 = u32::from_be_bytes(*b"rioc");
+pub const kAudioUnitSubType_DLSSynth: u32 = u32::from_be_bytes(*b"dls ");
+pub const kAudioUnitSubType_Sampler: u32 = u32::from_be_bytes(*b"samp");
+pub const kAudioUnitSubType_MIDISynth: u32 = u32::from_be_bytes(*b"msyn");
+pub const kAudioUnitSubType_AUConverter: u32 = u32::from_be_bytes(*b"conv");
+pub const kAudioUnitSubType_Varispeed: u32 = u32::from_be_bytes(*b"vari");
+pub const kAudioUnitSubType_DeferredRenderer: u32 = u32::from_be_bytes(*b"defr");
+pub const kAudioUnitSubType_Splitter: u32 = u32::from_be_bytes(*b"splt");
+pub const kAudioUnitSubType_MultiSplitter: u32 = u32::from_be_bytes(*b"mspl");
+pub const kAudioUnitSubType_Merger: u32 = u32::from_be_bytes(*b"merg");
+pub const kAudioUnitSubType_NewTimePitch: u32 = u32::from_be_bytes(*b"nutp");
+pub const kAudioUnitSubType_AUiPodTimeOther: u32 = u32::from_be_bytes(*b"ipto");
+pub const kAudioUnitSubType_RoundTripAAC: u32 = u32::from_be_bytes(*b"raac");
+pub const kAudioUnitSubType_TimePitch: u32 = u32::from_be_bytes(*b"tmpt");
+pub const kAudioUnitSubType_PeakLimiter: u32 = u32::from_be_bytes(*b"lmtr");
+pub const kAudioUnitSubType_DynamicsProcessor: u32 = u32::from_be_bytes(*b"dcmp");
+pub const kAudioUnitSubType_LowPassFilter: u32 = u32::from_be_bytes(*b"lpas");
+pub const kAudioUnitSubType_HighPassFilter: u32 = u32::from_be_bytes(*b"hpas");
+pub const kAudioUnitSubType_BandPassFilter: u32 = u32::from_be_bytes(*b"bpas");
+pub const kAudioUnitSubType_HighShelfFilter: u32 = u32::from_be_bytes(*b"hshf");
+pub const kAudioUnitSubType_LowShelfFilter: u32 = u32::from_be_bytes(*b"lshf");
+pub const kAudioUnitSubType_ParametricEQ: u32 = u32::from_be_bytes(*b"pmeq");
+pub const kAudioUnitSubType_Distortion: u32 = u32::from_be_bytes(*b"dist");
+pub const kAudioUnitSubType_Delay: u32 = u32::from_be_bytes(*b"dely");
+pub const kAudioUnitSubType_SampleDelay: u32 = u32::from_be_bytes(*b"sdly");
+pub const kAudioUnitSubType_NBandEQ: u32 = u32::from_be_bytes(*b"nbeq");
+pub const kAudioUnitSubType_Reverb2: u32 = u32::from_be_bytes(*b"rvb2");
+pub const kAudioUnitSubType_GraphicEQ: u32 = u32::from_be_bytes(*b"greq");
+pub const kAudioUnitSubType_MultiBandCompressor: u32 = u32::from_be_bytes(*b"mcmp");
+pub const kAudioUnitSubType_MatrixReverb: u32 = u32::from_be_bytes(*b"mrev");
+pub const kAudioUnitSubType_Pitch: u32 = u32::from_be_bytes(*b"tmpt");
+pub const kAudioUnitSubType_AUFilter: u32 = u32::from_be_bytes(*b"filt");
+pub const kAudioUnitSubType_NetSend: u32 = u32::from_be_bytes(*b"nsnd");
+pub const kAudioUnitSubType_RogerBeep: u32 = u32::from_be_bytes(*b"rogr");
+pub const kAudioUnitSubType_MultiChannelMixer: u32 = u32::from_be_bytes(*b"mcmx");
+pub const kAudioUnitSubType_MatrixMixer: u32 = u32::from_be_bytes(*b"mxmx");
+pub const kAudioUnitSubType_SpatialMixer: u32 = u32::from_be_bytes(*b"3dem");
+pub const kAudioUnitSubType_StereoMixer: u32 = u32::from_be_bytes(*b"smxr");
+pub const kAudioUnitSubType_SphericalHeadPanner: u32 = u32::from_be_bytes(*b"sphr");
+pub const kAudioUnitSubType_VectorPanner: u32 = u32::from_be_bytes(*b"vbas");
+pub const kAudioUnitSubType_SoundFieldPanner: u32 = u32::from_be_bytes(*b"ambi");
+pub const kAudioUnitSubType_HRTFPanner: u32 = u32::from_be_bytes(*b"hrtf");
+pub const kAudioUnitSubType_NetReceive: u32 = u32::from_be_bytes(*b"nrcv");
+pub const kAudioUnitSubType_ScheduledSoundPlayer: u32 = u32::from_be_bytes(*b"sspl");
+pub const kAudioUnitSubType_AudioFilePlayer: u32 = u32::from_be_bytes(*b"afpl");
 
-pub type AudioUnitRenderActionFlags = UInt32;
+pub type AudioUnitRenderActionFlags = u32;
 
 pub const kAudioUnitRenderAction_PreRender: AudioUnitRenderActionFlags = 1 << 2;
 pub const kAudioUnitRenderAction_PostRender: AudioUnitRenderActionFlags = 1 << 3;
@@ -771,22 +763,22 @@ pub const kAudioComponentErr_NotPermitted: OSStatus = -66748;
 pub const kAudioComponentErr_InitializationTimedOut: OSStatus = -66747;
 pub const kAudioComponentErr_InvalidFormat: OSStatus = -66746;
 
-pub type AUParameterEventType = UInt32;
+pub type AUParameterEventType = u32;
 
 pub const kParameterEvent_Immediate: AUParameterEventType = 1;
 pub const kParameterEvent_Ramped: AUParameterEventType = 2;
 
-pub type AudioUnitPropertyID = UInt32;
-pub type AudioUnitScope = UInt32;
-pub type AudioUnitElement = UInt32;
-pub type AudioUnitParameterID = UInt32;
-pub type AudioUnitParameterValue = Float32;
+pub type AudioUnitPropertyID = u32;
+pub type AudioUnitScope = u32;
+pub type AudioUnitElement = u32;
+pub type AudioUnitParameterID = u32;
+pub type AudioUnitParameterValue = f32;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioUnitParameterEventRamp {
-    pub startBufferOffset: SInt32,
-    pub durationInFrames: UInt32,
+    pub startBufferOffset: i32,
+    pub durationInFrames: u32,
     pub startValue: AudioUnitParameterValue,
     pub endValue: AudioUnitParameterValue,
 }
@@ -794,7 +786,7 @@ pub struct AudioUnitParameterEventRamp {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioUnitParameterEventImmediate {
-    pub bufferOffset: UInt32,
+    pub bufferOffset: u32,
     pub value: AudioUnitParameterValue,
 }
 
@@ -837,8 +829,8 @@ pub type AURenderCallback = unsafe extern "C" fn(
     inRefCon: *mut c_void,
     ioActionFlags: *const AudioUnitRenderActionFlags,
     inTimeStamp: *const AudioTimeStamp,
-    inBusNumber: UInt32,
-    inNumberFrames: UInt32,
+    inBusNumber: u32,
+    inNumberFrames: u32,
     ioData: *mut AudioBufferList,
 ) -> OSStatus;
 
@@ -853,8 +845,8 @@ pub type AudioUnitPropertyListenerProc = unsafe extern "C" fn(
 pub type AUInputSamplesInOutputCallback = unsafe extern "C" fn(
     inRefCon: *mut c_void,
     inOutputTimeStamp: *const AudioTimeStamp,
-    inInputSample: Float64,
-    inNumberInputSamples: Float64,
+    inInputSample: f64,
+    inNumberInputSamples: f64,
 );
 
 #[cfg_attr(target_os = "macos", link(name = "AudioToolbox", kind = "framework"))]
@@ -874,7 +866,7 @@ unsafe extern "C" {
         inID: AudioUnitPropertyID,
         inScope: AudioUnitScope,
         inElement: AudioUnitElement,
-        outDataSize: *mut UInt32,
+        outDataSize: *mut u32,
         outWritable: *mut Boolean,
     ) -> OSStatus;
 
@@ -884,7 +876,7 @@ unsafe extern "C" {
         inScope: AudioUnitScope,
         inElement: AudioUnitElement,
         outData: *mut c_void,
-        ioDataSize: *mut UInt32,
+        ioDataSize: *mut u32,
     ) -> OSStatus;
 
     pub fn AudioUnitSetProperty(
@@ -893,7 +885,7 @@ unsafe extern "C" {
         inScope: AudioUnitScope,
         inElement: AudioUnitElement,
         inData: *const c_void,
-        inDataSize: UInt32,
+        inDataSize: u32,
     ) -> OSStatus;
 
     pub fn AudioUnitAddPropertyListener(
@@ -936,21 +928,21 @@ unsafe extern "C" {
         inScope: AudioUnitScope,
         inElement: AudioUnitElement,
         inValue: AudioUnitParameterValue,
-        inBufferOffsetInFrames: UInt32,
+        inBufferOffsetInFrames: u32,
     ) -> OSStatus;
 
     pub fn AudioUnitScheduleParameters(
         inUnit: AudioUnit,
         inParameterEvent: *const AudioUnitParameterEvent,
-        inNumParamEvents: UInt32,
+        inNumParamEvents: u32,
     ) -> OSStatus;
 
     pub fn AudioUnitRender(
         inUnit: AudioUnit,
         ioActionFlags: *const AudioUnitRenderActionFlags,
         inTimeStamp: *const AudioTimeStamp,
-        inOutputBusNumber: UInt32,
-        inNumberFrames: UInt32,
+        inOutputBusNumber: u32,
+        inNumberFrames: u32,
         ioData: *mut AudioBufferList,
     ) -> OSStatus;
 
@@ -958,7 +950,7 @@ unsafe extern "C" {
         inUnit: AudioUnit,
         ioActionFlags: *const AudioUnitRenderActionFlags,
         inTimeStamp: *const AudioTimeStamp,
-        inNumberFrames: UInt32,
+        inNumberFrames: u32,
         ioData: *mut AudioBufferList,
     ) -> OSStatus;
 
@@ -966,10 +958,10 @@ unsafe extern "C" {
         inUnit: AudioUnit,
         ioActionFlags: *const AudioUnitRenderActionFlags,
         inTimeStamp: *const AudioTimeStamp,
-        inNumberFrames: UInt32,
-        inNumberInputBufferLists: UInt32,
+        inNumberFrames: u32,
+        inNumberInputBufferLists: u32,
         inInputBufferLists: *const *const AudioBufferList,
-        inNumberOutputBufferLists: UInt32,
+        inNumberOutputBufferLists: u32,
         ioOutputBufferLists: *mut *mut AudioBufferList,
     ) -> OSStatus;
 
@@ -982,30 +974,30 @@ unsafe extern "C" {
     pub fn AudioOutputUnitPublish(
         inDesc: *const AudioComponentDescription,
         inName: CFStringRef,
-        inVersion: UInt32,
+        inVersion: u32,
         inOutputUnit: AudioUnit,
     ) -> OSStatus;
 }
 
-pub const kAudioUnitRange: SInt16 = 0x0000;
-pub const kAudioUnitInitializeSelect: SInt16 = 0x0001;
-pub const kAudioUnitUninitializeSelect: SInt16 = 0x0002;
-pub const kAudioUnitGetPropertyInfoSelect: SInt16 = 0x0003;
-pub const kAudioUnitGetPropertySelect: SInt16 = 0x0004;
-pub const kAudioUnitSetPropertySelect: SInt16 = 0x0005;
-pub const kAudioUnitAddPropertyListenerSelect: SInt16 = 0x000A;
-pub const kAudioUnitRemovePropertyListenerSelect: SInt16 = 0x000B;
-pub const kAudioUnitRemovePropertyListenerWithUserDataSelect: SInt16 = 0x0012;
-pub const kAudioUnitAddRenderNotifySelect: SInt16 = 0x000F;
-pub const kAudioUnitRemoveRenderNotifySelect: SInt16 = 0x0010;
-pub const kAudioUnitGetParameterSelect: SInt16 = 0x0006;
-pub const kAudioUnitSetParameterSelect: SInt16 = 0x0007;
-pub const kAudioUnitScheduleParametersSelect: SInt16 = 0x0011;
-pub const kAudioUnitRenderSelect: SInt16 = 0x000E;
-pub const kAudioUnitResetSelect: SInt16 = 0x0009;
-pub const kAudioUnitComplexRenderSelect: SInt16 = 0x0013;
-pub const kAudioUnitProcessSelect: SInt16 = 0x0014;
-pub const kAudioUnitProcessMultipleSelect: SInt16 = 0x0015;
+pub const kAudioUnitRange: i16 = 0x0000;
+pub const kAudioUnitInitializeSelect: i16 = 0x0001;
+pub const kAudioUnitUninitializeSelect: i16 = 0x0002;
+pub const kAudioUnitGetPropertyInfoSelect: i16 = 0x0003;
+pub const kAudioUnitGetPropertySelect: i16 = 0x0004;
+pub const kAudioUnitSetPropertySelect: i16 = 0x0005;
+pub const kAudioUnitAddPropertyListenerSelect: i16 = 0x000A;
+pub const kAudioUnitRemovePropertyListenerSelect: i16 = 0x000B;
+pub const kAudioUnitRemovePropertyListenerWithUserDataSelect: i16 = 0x0012;
+pub const kAudioUnitAddRenderNotifySelect: i16 = 0x000F;
+pub const kAudioUnitRemoveRenderNotifySelect: i16 = 0x0010;
+pub const kAudioUnitGetParameterSelect: i16 = 0x0006;
+pub const kAudioUnitSetParameterSelect: i16 = 0x0007;
+pub const kAudioUnitScheduleParametersSelect: i16 = 0x0011;
+pub const kAudioUnitRenderSelect: i16 = 0x000E;
+pub const kAudioUnitResetSelect: i16 = 0x0009;
+pub const kAudioUnitComplexRenderSelect: i16 = 0x0013;
+pub const kAudioUnitProcessSelect: i16 = 0x0014;
+pub const kAudioUnitProcessMultipleSelect: i16 = 0x0015;
 
 pub type AudioUnitInitializeProc = unsafe extern "C" fn(self_: *mut c_void) -> OSStatus;
 
@@ -1016,7 +1008,7 @@ pub type AudioUnitGetPropertyInfoProc = unsafe extern "C" fn(
     prop: AudioUnitPropertyID,
     scope: AudioUnitScope,
     elem: AudioUnitElement,
-    outDataSize: *mut UInt32,
+    outDataSize: *mut u32,
     outWritable: *mut Boolean,
 ) -> OSStatus;
 
@@ -1026,7 +1018,7 @@ pub type AudioUnitGetPropertyProc = unsafe extern "C" fn(
     inScope: AudioUnitScope,
     inElement: AudioUnitElement,
     outData: *mut c_void,
-    ioDataSize: *mut UInt32,
+    ioDataSize: *mut u32,
 ) -> OSStatus;
 
 pub type AudioUnitSetPropertyProc = unsafe extern "C" fn(
@@ -1035,7 +1027,7 @@ pub type AudioUnitSetPropertyProc = unsafe extern "C" fn(
     inScope: AudioUnitScope,
     inElement: AudioUnitElement,
     inData: *const c_void,
-    inDataSize: UInt32,
+    inDataSize: u32,
 ) -> OSStatus;
 
 pub type AudioUnitAddPropertyListenerProc = unsafe extern "C" fn(
@@ -1073,7 +1065,7 @@ pub type AudioUnitRemoveRenderNotifyProc = unsafe extern "C" fn(
 pub type AudioUnitScheduleParametersProc = unsafe extern "C" fn(
     self_: *mut c_void,
     events: *const AudioUnitParameterEvent,
-    numEvents: UInt32,
+    numEvents: u32,
 ) -> OSStatus;
 
 pub type AudioUnitResetProc = unsafe extern "C" fn(
@@ -1086,20 +1078,20 @@ pub type AudioUnitComplexRenderProc = unsafe extern "C" fn(
     self_: *mut c_void,
     ioActionFlags: *const AudioUnitRenderActionFlags,
     nTimeStamp: *const AudioTimeStamp,
-    inOutputBusNumber: UInt32,
-    inNumberOfPackets: UInt32,
-    outNumberOfPackets: *mut UInt32,
+    inOutputBusNumber: u32,
+    inNumberOfPackets: u32,
+    outNumberOfPackets: *mut u32,
     outPacketDescriptions: *mut AudioStreamPacketDescription,
     ioData: *mut AudioBufferList,
     outMetadata: *mut c_void,
-    outMetadataByteSize: *mut UInt32,
+    outMetadataByteSize: *mut u32,
 ) -> OSStatus;
 
 pub type AudioUnitProcessProc = unsafe extern "C" fn(
     self_: *mut c_void,
     ioActionFlags: *const AudioUnitRenderActionFlags,
     nTimeStamp: *const AudioTimeStamp,
-    inNumberFrames: UInt32,
+    inNumberFrames: u32,
     ioData: *mut AudioBufferList,
 ) -> OSStatus;
 
@@ -1107,10 +1099,10 @@ pub type AudioUnitProcessMultipleProc = unsafe extern "C" fn(
     self_: *mut c_void,
     ioActionFlags: *const AudioUnitRenderActionFlags,
     nTimeStamp: *const AudioTimeStamp,
-    inNumberFrames: UInt32,
-    inNumberInputBufferLists: UInt32,
+    inNumberFrames: u32,
+    inNumberInputBufferLists: u32,
     inInputBufferLists: *const *const AudioBufferList,
-    inNumberOutputBufferLists: UInt32,
+    inNumberOutputBufferLists: u32,
     ioOutputBufferLists: *mut *mut AudioBufferList,
 ) -> OSStatus;
 
@@ -1128,15 +1120,15 @@ pub type AudioUnitSetParameterProc = unsafe extern "C" fn(
     inScope: AudioUnitScope,
     inElement: AudioUnitElement,
     inValue: AudioUnitParameterValue,
-    inBufferOffsetInFrames: UInt32,
+    inBufferOffsetInFrames: u32,
 ) -> OSStatus;
 
 pub type AudioUnitRenderProc = unsafe extern "C" fn(
     inComponentStorage: *mut c_void,
     ioActionFlags: *const AudioUnitRenderActionFlags,
     inTimeStamp: *const AudioTimeStamp,
-    inOutputBusNumber: UInt32,
-    inNumberFrames: UInt32,
+    inOutputBusNumber: u32,
+    inNumberFrames: u32,
     ioData: *mut AudioBufferList,
 ) -> OSStatus;
 
@@ -1148,9 +1140,9 @@ unsafe extern "C" {
     pub fn AudioOutputUnitStop(ci: AudioUnit) -> OSStatus;
 }
 
-pub const kAudioOutputUnitRange: UInt32 = 0x0200;
-pub const kAudioOutputUnitStartSelect: UInt32 = 0x0201;
-pub const kAudioOutputUnitStopSelect: UInt32 = 0x0202;
+pub const kAudioOutputUnitRange: u32 = 0x0200;
+pub const kAudioOutputUnitStartSelect: u32 = 0x0201;
+pub const kAudioOutputUnitStopSelect: u32 = 0x0202;
 
 pub type AudioOutputUnitStartProc = unsafe extern "C" fn(self_: *mut c_void) -> OSStatus;
 pub type AudioOutputUnitStopProc = unsafe extern "C" fn(self_: *mut c_void) -> OSStatus;
@@ -1241,22 +1233,22 @@ pub const kAUPresetPartKey: &str = "part";
 #[derive(Copy, Clone)]
 pub struct AudioUnitConnection {
     pub sourceAudioUnit: AudioUnit,
-    pub sourceOutputNumber: UInt32,
-    pub destInputNumber: UInt32,
+    pub sourceOutputNumber: u32,
+    pub destInputNumber: u32,
 }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AUChannelInfo {
-    pub inChannels: SInt16,
-    pub outChannels: SInt16,
+    pub inChannels: i16,
+    pub outChannels: i16,
 }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioUnitExternalBuffer {
-    pub buffer: *mut UInt8,
-    pub size: UInt32,
+    pub buffer: *mut u8,
+    pub size: u32,
 }
 
 #[repr(C)]
@@ -1269,47 +1261,47 @@ pub struct AURenderCallbackStruct {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AUPreset {
-    pub presetNumber: SInt32,
+    pub presetNumber: i32,
     pub presetName: CFStringRef,
 }
 
-pub const kRenderQuality_Max: UInt32 = 127;
-pub const kRenderQuality_High: UInt32 = 96;
-pub const kRenderQuality_Medium: UInt32 = 64;
-pub const kRenderQuality_Low: UInt32 = 32;
-pub const kRenderQuality_Min: UInt32 = 0;
+pub const kRenderQuality_Max: u32 = 127;
+pub const kRenderQuality_High: u32 = 96;
+pub const kRenderQuality_Medium: u32 = 64;
+pub const kRenderQuality_Low: u32 = 32;
+pub const kRenderQuality_Min: u32 = 0;
 
-pub const kNumberOfResponseFrequencies: UInt32 = 1024;
+pub const kNumberOfResponseFrequencies: u32 = 1024;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioUnitFrequencyResponseBin {
-    pub mFrequency: Float64,
-    pub mMagnitude: Float64,
+    pub mFrequency: f64,
+    pub mMagnitude: f64,
 }
 
 pub type HostCallback_GetBeatAndTempo = unsafe extern "C" fn(
     inHostUserData: *mut c_void,
-    outCurrentBeat: *mut Float64,
-    outCurrentTempo: *mut Float64,
+    outCurrentBeat: *mut f64,
+    outCurrentTempo: *mut f64,
 ) -> OSStatus;
 
 pub type HostCallback_GetMusicalTimeLocation = unsafe extern "C" fn(
     inHostUserData: *mut c_void,
-    outDeltaSampleOffsetToNextBeat: *mut UInt32,
-    outTimeSig_Numerator: *mut Float32,
-    outTimeSig_Denominator: *mut UInt32,
-    outCurrentMeasureDownBeat: *mut Float64,
+    outDeltaSampleOffsetToNextBeat: *mut u32,
+    outTimeSig_Numerator: *mut f32,
+    outTimeSig_Denominator: *mut u32,
+    outCurrentMeasureDownBeat: *mut f64,
 ) -> OSStatus;
 
 pub type HostCallback_GetTransportState = unsafe extern "C" fn(
     inHostUserData: *mut c_void,
     outIsPlaying: *mut Boolean,
     outTransportStateChanged: *mut Boolean,
-    outCurrentSampleInTimeLine: *mut Float64,
+    outCurrentSampleInTimeLine: *mut f64,
     outIsCycling: *mut Boolean,
-    outCycleStartBeat: *mut Float64,
-    outCycleEndBeat: *mut Float64,
+    outCycleStartBeat: *mut f64,
+    outCycleEndBeat: *mut f64,
 ) -> OSStatus;
 
 pub type HostCallback_GetTransportState2 = unsafe extern "C" fn(
@@ -1317,10 +1309,10 @@ pub type HostCallback_GetTransportState2 = unsafe extern "C" fn(
     outIsPlaying: *mut Boolean,
     outIsRecording: *mut Boolean,
     outTransportStateChanged: *mut Boolean,
-    outCurrentSampleInTimeLine: *mut Float64,
+    outCurrentSampleInTimeLine: *mut f64,
     outIsCycling: *mut Boolean,
-    outCycleStartBeat: *mut Float64,
-    outCycleEndBeat: *mut Float64,
+    outCycleStartBeat: *mut f64,
+    outCycleEndBeat: *mut f64,
 ) -> OSStatus;
 
 #[repr(C)]
@@ -1351,13 +1343,13 @@ pub struct AudioUnitCocoaViewInfo {
 #[derive(Copy, Clone)]
 pub struct AUHostVersionIdentifier {
     pub hostName: CFStringRef,
-    pub hostVersion: UInt32,
+    pub hostVersion: u32,
 }
 
 pub type AUMIDIOutputCallback = unsafe extern "C" fn(
     userData: *mut c_void,
     timeStamp: *const AudioTimeStamp,
-    midiOutNum: UInt32,
+    midiOutNum: u32,
     pktlist: *const MIDIPacketList,
 ) -> OSStatus;
 
@@ -1378,11 +1370,11 @@ pub struct AUInputSamplesInOutputCallbackStruct {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioUnitParameterHistoryInfo {
-    pub updatesPerSecond: Float32,
-    pub historyDurationInSeconds: Float32,
+    pub updatesPerSecond: f32,
+    pub historyDurationInSeconds: f32,
 }
 
-pub type AudioUnitParameterUnit = UInt32;
+pub type AudioUnitParameterUnit = u32;
 
 pub const kAudioUnitParameterUnit_Generic: AudioUnitParameterUnit = 0;
 pub const kAudioUnitParameterUnit_Indexed: AudioUnitParameterUnit = 1;
@@ -1412,7 +1404,7 @@ pub const kAudioUnitParameterUnit_Milliseconds: AudioUnitParameterUnit = 24;
 pub const kAudioUnitParameterUnit_Ratio: AudioUnitParameterUnit = 25;
 pub const kAudioUnitParameterUnit_CustomUnit: AudioUnitParameterUnit = 26;
 
-pub type AudioUnitParameterOptions = UInt32;
+pub type AudioUnitParameterOptions = u32;
 
 pub const kAudioUnitParameterFlag_CFNameRelease: AudioUnitParameterOptions = 1 << 4;
 pub const kAudioUnitParameterFlag_OmitFromPresets: AudioUnitParameterOptions = 1 << 13;
@@ -1442,7 +1434,7 @@ pub const kAudioUnitParameterFlag_IsWritable: AudioUnitParameterOptions = 1 << 3
 pub struct AudioUnitParameterInfo {
     pub name: [c_char; 52],
     pub unitName: CFStringRef,
-    pub clumpID: UInt32,
+    pub clumpID: u32,
     pub cfNameString: CFStringRef,
     pub unit: AudioUnitParameterUnit,
     pub minValue: AudioUnitParameterValue,
@@ -1451,7 +1443,7 @@ pub struct AudioUnitParameterInfo {
     pub flags: AudioUnitParameterOptions,
 }
 
-pub const kAudioUnitClumpID_System: UInt32 = 0;
+pub const kAudioUnitClumpID_System: u32 = 0;
 
 #[inline]
 pub const fn GetAudioUnitParameterDisplayType(
@@ -1468,13 +1460,13 @@ pub const fn SetAudioUnitParameterDisplayType(
     (flags & !kAudioUnitParameterFlag_DisplayMask) | displayType
 }
 
-pub const kAudioUnitParameterName_Full: UInt32 = u32::MAX;
+pub const kAudioUnitParameterName_Full: u32 = u32::MAX;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioUnitParameterNameInfo {
     pub inID: AudioUnitParameterID,
-    pub inDesiredLength: SInt32,
+    pub inDesiredLength: i32,
     pub outName: CFStringRef,
 }
 
@@ -1496,7 +1488,7 @@ pub struct AudioUnitParameterValueFromString {
     pub outValueL: AudioUnitParameterValue,
 }
 
-pub type AudioUnitRemoteControlEvent = UInt32;
+pub type AudioUnitRemoteControlEvent = u32;
 
 pub const kAudioUnitRemoteControlEvent_TogglePlayPause: AudioUnitRemoteControlEvent = 1;
 pub const kAudioUnitRemoteControlEvent_ToggleRecord: AudioUnitRemoteControlEvent = 2;
@@ -1516,7 +1508,7 @@ pub const kAudioUnitProperty_AddParameterMIDIMapping: AudioUnitPropertyID = 42;
 pub const kAudioUnitProperty_RemoveParameterMIDIMapping: AudioUnitPropertyID = 43;
 pub const kAudioUnitProperty_HotMapParameterMIDIMapping: AudioUnitPropertyID = 44;
 
-pub type AUParameterMIDIMappingFlags = UInt32;
+pub type AUParameterMIDIMappingFlags = u32;
 
 pub const kAUParameterMIDIMapping_AnyChannelFlag: AUParameterMIDIMappingFlags = 1 << 0;
 pub const kAUParameterMIDIMapping_AnyNoteFlag: AUParameterMIDIMappingFlags = 1 << 1;
@@ -1534,11 +1526,11 @@ pub struct AUParameterMIDIMapping {
     pub mFlags: AUParameterMIDIMappingFlags,
     pub mSubRangeMin: AudioUnitParameterValue,
     pub mSubRangeMax: AudioUnitParameterValue,
-    pub mStatus: UInt8,
-    pub mData1: UInt8,
-    pub reserved1: UInt8,
-    pub reserved2: UInt8,
-    pub reserved3: UInt32,
+    pub mStatus: u8,
+    pub mData1: u8,
+    pub reserved1: u8,
+    pub reserved2: u8,
+    pub reserved3: u32,
 }
 
 pub const kMusicDeviceProperty_MIDIXMLNames: AudioUnitPropertyID = 1006;
@@ -1546,8 +1538,8 @@ pub const kMusicDeviceProperty_PartGroup: AudioUnitPropertyID = 1010;
 pub const kMusicDeviceProperty_DualSchedulingMode: AudioUnitPropertyID = 1013;
 pub const kMusicDeviceProperty_SupportsStartStopNote: AudioUnitPropertyID = 1014;
 
-pub const kMusicDeviceSampleFrameMask_SampleOffset: UInt32 = 0xFFFFFF;
-pub const kMusicDeviceSampleFrameMask_IsScheduled: UInt32 = 0x01000000;
+pub const kMusicDeviceSampleFrameMask_SampleOffset: u32 = 0xFFFFFF;
+pub const kMusicDeviceSampleFrameMask_IsScheduled: u32 = 0x01000000;
 
 pub const kAudioUnitOfflineProperty_InputSize: AudioUnitPropertyID = 3020;
 pub const kAudioUnitOfflineProperty_OutputSize: AudioUnitPropertyID = 3021;
@@ -1555,22 +1547,22 @@ pub const kAudioUnitOfflineProperty_StartOffset: AudioUnitPropertyID = 3022;
 pub const kAudioUnitOfflineProperty_PreflightRequirements: AudioUnitPropertyID = 3023;
 pub const kAudioUnitOfflineProperty_PreflightName: AudioUnitPropertyID = 3024;
 
-pub const kOfflinePreflight_NotRequired: UInt32 = 0;
-pub const kOfflinePreflight_Optional: UInt32 = 1;
-pub const kOfflinePreflight_Required: UInt32 = 2;
+pub const kOfflinePreflight_NotRequired: u32 = 0;
+pub const kOfflinePreflight_Optional: u32 = 1;
+pub const kOfflinePreflight_Required: u32 = 2;
 
-pub const kAudioUnitMigrateProperty_FromPlugin: UInt32 = 4000;
-pub const kAudioUnitMigrateProperty_OldAutomation: UInt32 = 4001;
+pub const kAudioUnitMigrateProperty_FromPlugin: u32 = 4000;
+pub const kAudioUnitMigrateProperty_OldAutomation: u32 = 4001;
 
-pub const kOtherPluginFormat_Undefined: UInt32 = 0;
-pub const kOtherPluginFormat_kMAS: UInt32 = 1;
-pub const kOtherPluginFormat_kVST: UInt32 = 2;
-pub const kOtherPluginFormat_AU: UInt32 = 3;
+pub const kOtherPluginFormat_Undefined: u32 = 0;
+pub const kOtherPluginFormat_kMAS: u32 = 1;
+pub const kOtherPluginFormat_kVST: u32 = 2;
+pub const kOtherPluginFormat_AU: u32 = 3;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioUnitOtherPluginDesc {
-    pub format: UInt32,
+    pub format: u32,
     pub plugin: AudioClassDescription,
 }
 
@@ -1578,8 +1570,8 @@ pub struct AudioUnitOtherPluginDesc {
 #[derive(Copy, Clone)]
 pub struct AudioUnitParameterValueTranslation {
     pub otherDesc: AudioUnitOtherPluginDesc,
-    pub otherParamID: UInt32,
-    pub otherValue: Float32,
+    pub otherParamID: u32,
+    pub otherValue: f32,
     pub auParamID: AudioUnitParameterID,
     pub auValue: AudioUnitParameterValue,
 }
@@ -1587,28 +1579,28 @@ pub struct AudioUnitParameterValueTranslation {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioUnitPresetMAS_SettingData {
-    pub isStockSetting: UInt32,
-    pub settingID: UInt32,
-    pub dataLen: UInt32,
-    pub data: [UInt8; 0],
+    pub isStockSetting: u32,
+    pub settingID: u32,
+    pub dataLen: u32,
+    pub data: [u8; 0],
 }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioUnitPresetMAS_Settings {
-    pub manufacturerID: UInt32,
-    pub effectID: UInt32,
-    pub variantID: UInt32,
-    pub settingsVersion: UInt32,
-    pub numberOfSettings: UInt32,
+    pub manufacturerID: u32,
+    pub effectID: u32,
+    pub variantID: u32,
+    pub settingsVersion: u32,
+    pub numberOfSettings: u32,
     pub settings: [AudioUnitPresetMAS_SettingData; 0],
 }
 
 pub const kAudioUnitProperty_SampleRateConverterComplexity: AudioUnitPropertyID = 3014;
 
-pub const kAudioUnitSampleRateConverterComplexity_Linear: UInt32 = u32::from_be_bytes(*b"line");
-pub const kAudioUnitSampleRateConverterComplexity_Normal: UInt32 = u32::from_be_bytes(*b"norm");
-pub const kAudioUnitSampleRateConverterComplexity_Mastering: UInt32 = u32::from_be_bytes(*b"bats");
+pub const kAudioUnitSampleRateConverterComplexity_Linear: u32 = u32::from_be_bytes(*b"line");
+pub const kAudioUnitSampleRateConverterComplexity_Normal: u32 = u32::from_be_bytes(*b"norm");
+pub const kAudioUnitSampleRateConverterComplexity_Mastering: u32 = u32::from_be_bytes(*b"bats");
 
 pub const kAudioOutputUnitProperty_CurrentDevice: AudioUnitPropertyID = 2000;
 pub const kAudioOutputUnitProperty_IsRunning: AudioUnitPropertyID = 2001;
@@ -1634,21 +1626,21 @@ pub struct AudioOutputUnitMIDICallbacks {
     pub MIDIEventProc: Option<
         unsafe extern "C" fn(
             userData: *mut c_void,
-            inStatus: UInt32,
-            inData1: UInt32,
-            inData2: UInt32,
-            inOffsetSampleFrame: UInt32,
+            inStatus: u32,
+            inData1: u32,
+            inData2: u32,
+            inOffsetSampleFrame: u32,
         ),
     >,
     pub MIDISysExProc:
-        Option<unsafe extern "C" fn(userData: *mut c_void, inData: *const UInt8, inLength: UInt32)>,
+        Option<unsafe extern "C" fn(userData: *mut c_void, inData: *const u8, inLength: u32)>,
 }
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioOutputUnitStartAtTimeParams {
     pub mTimestamp: AudioTimeStamp,
-    pub mFlags: UInt32,
+    pub mFlags: u32,
 }
 
 pub const kAUVoiceIOProperty_BypassVoiceProcessing: AudioUnitPropertyID = 2100;
@@ -1670,7 +1662,7 @@ pub const kAudioUnitProperty_InputAnchorTimeStamp: AudioUnitPropertyID = 3016;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioUnitMeterClipping {
-    pub peakValueSinceLastCall: Float32,
+    pub peakValueSinceLastCall: f32,
     pub sawInfinity: Boolean,
     pub sawNotANumber: Boolean,
 }
@@ -1685,7 +1677,7 @@ pub const kAudioUnitProperty_SpatialMixerAttenuationCurve: AudioUnitPropertyID =
 pub const kAudioUnitProperty_SpatialMixerOutputType: AudioUnitPropertyID = 3100;
 pub const kAudioUnitProperty_SpatialMixerPointSourceInHeadMode: AudioUnitPropertyID = 3103;
 
-pub type AUSpatializationAlgorithm = UInt32;
+pub type AUSpatializationAlgorithm = u32;
 
 pub const kSpatializationAlgorithm_EqualPowerPanning: AUSpatializationAlgorithm = 0;
 pub const kSpatializationAlgorithm_SphericalHead: AUSpatializationAlgorithm = 1;
@@ -1696,14 +1688,14 @@ pub const kSpatializationAlgorithm_StereoPassThrough: AUSpatializationAlgorithm 
 pub const kSpatializationAlgorithm_HRTFHQ: AUSpatializationAlgorithm = 6;
 pub const kSpatializationAlgorithm_UseOutputType: AUSpatializationAlgorithm = 7;
 
-pub type AUSpatialMixerSourceMode = UInt32;
+pub type AUSpatialMixerSourceMode = u32;
 
 pub const kSpatialMixerSourceMode_SpatializeIfMono: AUSpatialMixerSourceMode = 0;
 pub const kSpatialMixerSourceMode_Bypass: AUSpatialMixerSourceMode = 1;
 pub const kSpatialMixerSourceMode_PointSource: AUSpatialMixerSourceMode = 2;
 pub const kSpatialMixerSourceMode_AmbienceBed: AUSpatialMixerSourceMode = 3;
 
-pub type AUReverbRoomType = UInt32;
+pub type AUReverbRoomType = u32;
 
 pub const kReverbRoomType_SmallRoom: AUReverbRoomType = 0;
 pub const kReverbRoomType_MediumRoom: AUReverbRoomType = 1;
@@ -1719,7 +1711,7 @@ pub const kReverbRoomType_MediumHall2: AUReverbRoomType = 10;
 pub const kReverbRoomType_MediumHall3: AUReverbRoomType = 11;
 pub const kReverbRoomType_LargeHall2: AUReverbRoomType = 12;
 
-pub type AUSpatialMixerAttenuationCurve = UInt32;
+pub type AUSpatialMixerAttenuationCurve = u32;
 
 pub const kSpatialMixerAttenuationCurve_Power: AUSpatialMixerAttenuationCurve = 0;
 pub const kSpatialMixerAttenuationCurve_Exponential: AUSpatialMixerAttenuationCurve = 1;
@@ -1729,23 +1721,23 @@ pub const kSpatialMixerAttenuationCurve_Linear: AUSpatialMixerAttenuationCurve =
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct MixerDistanceParams {
-    pub mReferenceDistance: Float32,
-    pub mMaxDistance: Float32,
-    pub mMaxAttenuation: Float32,
+    pub mReferenceDistance: f32,
+    pub mMaxDistance: f32,
+    pub mMaxAttenuation: f32,
 }
 
-pub type AUSpatialMixerRenderingFlags = UInt32;
+pub type AUSpatialMixerRenderingFlags = u32;
 
 pub const kSpatialMixerRenderingFlags_InterAuralDelay: AUSpatialMixerRenderingFlags = 1 << 0;
 pub const kSpatialMixerRenderingFlags_DistanceAttenuation: AUSpatialMixerRenderingFlags = 1 << 2;
 
-pub type AUSpatialMixerOutputType = UInt32;
+pub type AUSpatialMixerOutputType = u32;
 
 pub const kSpatialMixerOutputType_Headphones: AUSpatialMixerOutputType = 1;
 pub const kSpatialMixerOutputType_BuiltInSpeakers: AUSpatialMixerOutputType = 2;
 pub const kSpatialMixerOutputType_ExternalSpeakers: AUSpatialMixerOutputType = 3;
 
-pub type AUSpatialMixerPointSourceInHeadMode = UInt32;
+pub type AUSpatialMixerPointSourceInHeadMode = u32;
 
 pub const kSpatialMixerPointSourceInHeadMode_Mono: AUSpatialMixerPointSourceInHeadMode = 0;
 pub const kSpatialMixerPointSourceInHeadMode_Bypass: AUSpatialMixerPointSourceInHeadMode = 1;
@@ -1754,7 +1746,7 @@ pub const kAudioUnitProperty_ScheduleAudioSlice: AudioUnitPropertyID = 3300;
 pub const kAudioUnitProperty_ScheduleStartTimeStamp: AudioUnitPropertyID = 3301;
 pub const kAudioUnitProperty_CurrentPlayTime: AudioUnitPropertyID = 3302;
 
-pub type AUScheduledAudioSliceFlags = UInt32;
+pub type AUScheduledAudioSliceFlags = u32;
 
 pub const kScheduledAudioSliceFlag_Complete: AUScheduledAudioSliceFlags = 0x01;
 pub const kScheduledAudioSliceFlag_BeganToRender: AUScheduledAudioSliceFlags = 0x02;
@@ -1773,9 +1765,9 @@ pub struct ScheduledAudioSlice {
     pub mCompletionProc: Option<ScheduledAudioSliceCompletionProc>,
     pub mCompletionProcUserData: *mut c_void,
     pub mFlags: AUScheduledAudioSliceFlags,
-    pub mReserved: UInt32,
+    pub mReserved: u32,
     pub mReserved2: *mut c_void,
-    pub mNumberFrames: UInt32,
+    pub mNumberFrames: u32,
     pub mBufferList: *mut AudioBufferList,
 }
 
@@ -1800,9 +1792,9 @@ pub struct ScheduledAudioFileRegion {
     pub mCompletionProc: Option<ScheduledAudioFileRegionCompletionProc>,
     pub mCompletionProcUserData: *mut c_void,
     pub mAudioFile: *const OpaqueAudioFileID,
-    pub mLoopCount: UInt32,
-    pub mStartFrame: SInt64,
-    pub mFramesToPlay: UInt32,
+    pub mLoopCount: u32,
+    pub mStartFrame: i64,
+    pub mFramesToPlay: u32,
 }
 
 pub const kMusicDeviceProperty_UsesInternalReverb: AudioUnitPropertyID =
@@ -1827,21 +1819,21 @@ pub const kAUSamplerProperty_LoadAudioFiles: AudioUnitPropertyID = 4101;
 #[derive(Copy, Clone)]
 pub struct AUSamplerInstrumentData {
     pub fileURL: CFURLRef,
-    pub instrumentType: UInt8,
-    pub bankMSB: UInt8,
-    pub bankLSB: UInt8,
-    pub presetID: UInt8,
+    pub instrumentType: u8,
+    pub bankMSB: u8,
+    pub bankLSB: u8,
+    pub presetID: u8,
 }
 
-pub const kInstrumentType_DLSPreset: UInt32 = 1;
-pub const kInstrumentType_SF2Preset: UInt32 = kInstrumentType_DLSPreset;
-pub const kInstrumentType_AUPreset: UInt32 = 2;
-pub const kInstrumentType_Audiofile: UInt32 = 3;
-pub const kInstrumentType_EXS24: UInt32 = 4;
+pub const kInstrumentType_DLSPreset: u32 = 1;
+pub const kInstrumentType_SF2Preset: u32 = kInstrumentType_DLSPreset;
+pub const kInstrumentType_AUPreset: u32 = 2;
+pub const kInstrumentType_Audiofile: u32 = 3;
+pub const kInstrumentType_EXS24: u32 = 4;
 
-pub const kAUSampler_DefaultPercussionBankMSB: UInt32 = 0x78;
-pub const kAUSampler_DefaultMelodicBankMSB: UInt32 = 0x79;
-pub const kAUSampler_DefaultBankLSB: UInt32 = 0x00;
+pub const kAUSampler_DefaultPercussionBankMSB: u32 = 0x78;
+pub const kAUSampler_DefaultMelodicBankMSB: u32 = 0x79;
+pub const kAUSampler_DefaultBankLSB: u32 = 0x00;
 
 pub const kAudioUnitProperty_DeferredRendererPullSize: AudioUnitParameterID = 3320;
 pub const kAudioUnitProperty_DeferredRendererExtraLatency: AudioUnitParameterID = 3321;
@@ -1857,7 +1849,7 @@ pub const kAUNetSendProperty_ServiceName: AudioUnitPropertyID = 3516;
 pub const kAUNetSendProperty_Disconnect: AudioUnitPropertyID = 3517;
 pub const kAUNetSendProperty_Password: AudioUnitPropertyID = 3518;
 
-pub const kAUNetSendPresetFormat_PCMFloat32: AudioUnitPropertyID = 0;
+pub const kAUNetSendPresetFormat_PCMf32: AudioUnitPropertyID = 0;
 pub const kAUNetSendPresetFormat_PCMInt24: AudioUnitPropertyID = 1;
 pub const kAUNetSendPresetFormat_PCMInt16: AudioUnitPropertyID = 2;
 pub const kAUNetSendPresetFormat_Lossless24: AudioUnitPropertyID = 3;
@@ -1907,14 +1899,14 @@ pub const kAUGroupParameterID_KeyPressure_LastKey: AudioUnitParameterID = 383;
 
 // MusicDevice.h
 
-pub type MusicDeviceInstrumentID = UInt32;
+pub type MusicDeviceInstrumentID = u32;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct MusicDeviceStdNoteParams {
-    pub argCount: UInt32,
-    pub mPitch: Float32,
-    pub mVelocity: Float32,
+    pub argCount: u32,
+    pub mPitch: f32,
+    pub mVelocity: f32,
 }
 
 #[repr(C)]
@@ -1927,17 +1919,17 @@ pub struct NoteParamsControlValue {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct MusicDeviceNoteParams {
-    pub argCount: UInt32,
-    pub mPitch: Float32,
-    pub mVelocity: Float32,
+    pub argCount: u32,
+    pub mPitch: f32,
+    pub mVelocity: f32,
     pub mControls: [NoteParamsControlValue; 0],
 }
 
-pub const kMusicNoteEvent_UseGroupInstrument: UInt32 = 0xFFFFFFFF;
-pub const kMusicNoteEvent_Unused: UInt32 = 0xFFFFFFFF;
+pub const kMusicNoteEvent_UseGroupInstrument: u32 = 0xFFFFFFFF;
+pub const kMusicNoteEvent_Unused: u32 = 0xFFFFFFFF;
 
-pub type MusicDeviceGroupID = UInt32;
-pub type NoteInstanceID = UInt32;
+pub type MusicDeviceGroupID = u32;
+pub type NoteInstanceID = u32;
 
 pub type MusicDeviceComponent = AudioComponentInstance;
 
@@ -1945,16 +1937,16 @@ pub type MusicDeviceComponent = AudioComponentInstance;
 unsafe extern "C" {
     pub fn MusicDeviceMIDIEvent(
         inUnit: MusicDeviceComponent,
-        inStatus: UInt32,
-        inData1: UInt32,
-        inData2: UInt32,
-        inOffsetSampleFrame: UInt32,
+        inStatus: u32,
+        inData1: u32,
+        inData2: u32,
+        inOffsetSampleFrame: u32,
     ) -> OSStatus;
 
     pub fn MusicDeviceSysEx(
         inUnit: MusicDeviceComponent,
-        inData: *const UInt8,
-        inLength: UInt32,
+        inData: *const u8,
+        inLength: u32,
     ) -> OSStatus;
 
     pub fn MusicDeviceStartNote(
@@ -1962,7 +1954,7 @@ unsafe extern "C" {
         inInstrument: MusicDeviceInstrumentID,
         inGroupID: MusicDeviceGroupID,
         outNoteInstanceID: *mut NoteInstanceID,
-        inOffsetSampleFrame: UInt32,
+        inOffsetSampleFrame: u32,
         inParams: *const MusicDeviceNoteParams,
     ) -> OSStatus;
 
@@ -1970,35 +1962,35 @@ unsafe extern "C" {
         inUnit: MusicDeviceComponent,
         inGroupID: MusicDeviceGroupID,
         inNoteInstanceID: NoteInstanceID,
-        inOffsetSampleFrame: UInt32,
+        inOffsetSampleFrame: u32,
     ) -> OSStatus;
 }
 
-pub const kMusicDeviceRange: SInt16 = 0x0100;
-pub const kMusicDeviceMIDIEventSelect: SInt16 = 0x0101;
-pub const kMusicDeviceSysExSelect: SInt16 = 0x0102;
-pub const kMusicDevicePrepareInstrumentSelect: SInt16 = 0x0103;
-pub const kMusicDeviceReleaseInstrumentSelect: SInt16 = 0x0104;
-pub const kMusicDeviceStartNoteSelect: SInt16 = 0x0105;
-pub const kMusicDeviceStopNoteSelect: SInt16 = 0x0106;
+pub const kMusicDeviceRange: i16 = 0x0100;
+pub const kMusicDeviceMIDIEventSelect: i16 = 0x0101;
+pub const kMusicDeviceSysExSelect: i16 = 0x0102;
+pub const kMusicDevicePrepareInstrumentSelect: i16 = 0x0103;
+pub const kMusicDeviceReleaseInstrumentSelect: i16 = 0x0104;
+pub const kMusicDeviceStartNoteSelect: i16 = 0x0105;
+pub const kMusicDeviceStopNoteSelect: i16 = 0x0106;
 
 pub type MusicDeviceMIDIEventProc = unsafe extern "C" fn(
     self_: *mut c_void,
-    inStatus: UInt32,
-    inData1: UInt32,
-    inData2: UInt32,
-    inOffsetSampleFrame: UInt32,
+    inStatus: u32,
+    inData1: u32,
+    inData2: u32,
+    inOffsetSampleFrame: u32,
 ) -> OSStatus;
 
 pub type MusicDeviceSysExProc =
-    unsafe extern "C" fn(self_: *mut c_void, inData: *const UInt8, inLength: UInt32) -> OSStatus;
+    unsafe extern "C" fn(self_: *mut c_void, inData: *const u8, inLength: u32) -> OSStatus;
 
 pub type MusicDeviceStartNoteProc = unsafe extern "C" fn(
     self_: *mut c_void,
     inInstrument: MusicDeviceInstrumentID,
     inGroupID: MusicDeviceGroupID,
     outNoteInstanceID: *mut NoteInstanceID,
-    inOffsetSampleFrame: UInt32,
+    inOffsetSampleFrame: u32,
     inParams: *const MusicDeviceNoteParams,
 ) -> OSStatus;
 
@@ -2006,22 +1998,22 @@ pub type MusicDeviceStopNoteProc = unsafe extern "C" fn(
     self_: *mut c_void,
     inGroupID: MusicDeviceGroupID,
     inNoteInstanceID: NoteInstanceID,
-    inOffsetSampleFrame: UInt32,
+    inOffsetSampleFrame: u32,
 ) -> OSStatus;
 
 // AudioUnitUtilities.h
 
-pub const kAUParameterListener_AnyParameter: UInt32 = 0xFFFFFFFF;
+pub const kAUParameterListener_AnyParameter: u32 = 0xFFFFFFFF;
 
-pub const kAudioUnitEvent_ParameterValueChange: UInt32 = 0;
-pub const kAudioUnitEvent_BeginParameterChangeGesture: UInt32 = 1;
-pub const kAudioUnitEvent_EndParameterChangeGesture: UInt32 = 2;
-pub const kAudioUnitEvent_PropertyChange: UInt32 = 3;
+pub const kAudioUnitEvent_ParameterValueChange: u32 = 0;
+pub const kAudioUnitEvent_BeginParameterChangeGesture: u32 = 1;
+pub const kAudioUnitEvent_EndParameterChangeGesture: u32 = 2;
+pub const kAudioUnitEvent_PropertyChange: u32 = 3;
 
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioUnitEvent {
-    pub mEventType: UInt32,
+    pub mEventType: u32,
     pub mArgument: AudioUnitEventArgument,
 }
 
@@ -2043,7 +2035,7 @@ pub type AUEventListenerProc = unsafe extern "C" fn(
     inUserData: *mut c_void,
     inObject: *mut c_void,
     inEvent: *const AudioUnitEvent,
-    inEventHostTime: UInt64,
+    inEventHostTime: u64,
     inParameterValue: AudioUnitParameterValue,
 );
 
@@ -2060,7 +2052,7 @@ unsafe extern "C" {
         inUserData: *mut c_void,
         inRunLoop: CFRunLoopRef,
         inRunLoopMode: CFStringRef,
-        inNotificationInterval: Float32,
+        inNotificationInterval: f32,
         outListener: *mut AUParameterListenerRef,
     ) -> OSStatus;
 
@@ -2083,7 +2075,7 @@ unsafe extern "C" {
         inSendingObject: *mut c_void,
         inParameter: *const AudioUnitParameter,
         inValue: AudioUnitParameterValue,
-        inBufferOffsetInFrames: UInt32,
+        inBufferOffsetInFrames: u32,
     ) -> OSStatus;
 
     pub fn AUParameterListenerNotify(
@@ -2097,8 +2089,8 @@ unsafe extern "C" {
         inUserData: *mut c_void,
         inRunLoop: CFRunLoopRef,
         inRunLoopMode: CFStringRef,
-        inNotificationInterval: Float32,
-        inValueChangeGranularity: Float32,
+        inNotificationInterval: f32,
+        inValueChangeGranularity: f32,
         outListener: *mut AUEventListenerRef,
     ) -> OSStatus;
 
@@ -2123,17 +2115,17 @@ unsafe extern "C" {
     pub fn AUParameterValueToLinear(
         inParameterValue: AudioUnitParameterValue,
         inParameter: *const AudioUnitParameter,
-    ) -> Float32;
+    ) -> f32;
 
     pub fn AUParameterValueFromLinear(
-        inLinearValue: Float32,
+        inLinearValue: f32,
         inParameter: *const AudioUnitParameter,
     ) -> AudioUnitParameterValue;
 
     pub fn AUParameterFormatValue(
-        inParameterValue: Float64,
+        inParameterValue: f64,
         inParameter: *const AudioUnitParameter,
         inTextBuffer: *const c_char,
-        inDigits: UInt32,
+        inDigits: u32,
     );
 }
