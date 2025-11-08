@@ -33,8 +33,8 @@ pub struct AudioBuffer {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct AudioBufferList {
-    mNumberBuffers: u32,
-    mBuffers: [AudioBuffer; 0],
+    pub mNumberBuffers: u32,
+    pub mBuffers: [AudioBuffer; 0],
 }
 
 #[repr(C)]
